@@ -1,2 +1,2 @@
-# ReflowFurnace
-Reflow soldering heater project
+# Reflow Owen
+Reflow soldering heater project for FEKT VUT Brno
