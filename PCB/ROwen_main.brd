@@ -8,22 +8,22 @@
 </settings>
 <grid distance="0.0125" unitdist="inch" unit="inch" style="lines" multiple="1" display="no" altdistance="0.00625" altunitdist="inch" altunit="inch"/>
 <layers>
-<layer number="1" name="Top" color="4" fill="1" visible="yes" active="yes"/>
-<layer number="16" name="Bottom" color="1" fill="1" visible="yes" active="yes"/>
-<layer number="17" name="Pads" color="2" fill="1" visible="yes" active="yes"/>
-<layer number="18" name="Vias" color="2" fill="1" visible="yes" active="yes"/>
-<layer number="19" name="Unrouted" color="6" fill="1" visible="yes" active="yes"/>
+<layer number="1" name="Top" color="4" fill="1" visible="no" active="yes"/>
+<layer number="16" name="Bottom" color="1" fill="1" visible="no" active="yes"/>
+<layer number="17" name="Pads" color="2" fill="1" visible="no" active="yes"/>
+<layer number="18" name="Vias" color="2" fill="1" visible="no" active="yes"/>
+<layer number="19" name="Unrouted" color="6" fill="1" visible="no" active="yes"/>
 <layer number="20" name="Dimension" color="15" fill="1" visible="yes" active="yes"/>
 <layer number="21" name="tPlace" color="7" fill="1" visible="yes" active="yes"/>
-<layer number="22" name="bPlace" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="22" name="bPlace" color="7" fill="1" visible="no" active="yes"/>
 <layer number="23" name="tOrigins" color="15" fill="1" visible="yes" active="yes"/>
-<layer number="24" name="bOrigins" color="15" fill="1" visible="yes" active="yes"/>
-<layer number="25" name="tNames" color="7" fill="1" visible="yes" active="yes"/>
-<layer number="26" name="bNames" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="24" name="bOrigins" color="15" fill="1" visible="no" active="yes"/>
+<layer number="25" name="tNames" color="7" fill="1" visible="no" active="yes"/>
+<layer number="26" name="bNames" color="7" fill="1" visible="no" active="yes"/>
 <layer number="27" name="tValues" color="7" fill="1" visible="no" active="yes"/>
 <layer number="28" name="bValues" color="7" fill="1" visible="no" active="yes"/>
-<layer number="29" name="tStop" color="7" fill="3" visible="yes" active="yes"/>
-<layer number="30" name="bStop" color="7" fill="6" visible="yes" active="yes"/>
+<layer number="29" name="tStop" color="7" fill="3" visible="no" active="yes"/>
+<layer number="30" name="bStop" color="7" fill="6" visible="no" active="yes"/>
 <layer number="31" name="tCream" color="7" fill="4" visible="no" active="yes"/>
 <layer number="32" name="bCream" color="7" fill="5" visible="no" active="yes"/>
 <layer number="33" name="tFinish" color="6" fill="3" visible="no" active="yes"/>
@@ -40,8 +40,8 @@
 <layer number="44" name="Drills" color="7" fill="1" visible="no" active="yes"/>
 <layer number="45" name="Holes" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="46" name="Milling" color="3" fill="1" visible="no" active="yes"/>
-<layer number="47" name="Measures" color="7" fill="1" visible="no" active="yes"/>
-<layer number="48" name="Document" color="7" fill="1" visible="no" active="yes"/>
+<layer number="47" name="Measures" color="10" fill="1" visible="yes" active="yes"/>
+<layer number="48" name="Document" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="49" name="Reference" color="7" fill="1" visible="no" active="yes"/>
 <layer number="50" name="dxf" color="7" fill="1" visible="no" active="no"/>
 <layer number="51" name="tDocu" color="7" fill="1" visible="no" active="yes"/>
@@ -120,7 +120,7 @@
 <layer number="224" name="224bmp" color="25" fill="1" visible="no" active="no"/>
 <layer number="230" name="Eagle3D" color="7" fill="1" visible="no" active="yes"/>
 <layer number="248" name="Housing" color="7" fill="1" visible="no" active="yes"/>
-<layer number="249" name="Edge" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="249" name="Edge" color="7" fill="1" visible="no" active="yes"/>
 <layer number="250" name="Descript" color="7" fill="1" visible="no" active="no"/>
 <layer number="251" name="SMDround" color="7" fill="1" visible="no" active="no"/>
 <layer number="254" name="OrgLBR" color="7" fill="1" visible="no" active="no"/>
@@ -135,6 +135,42 @@
 <text x="50.165" y="33.9725" size="2.1844" layer="1" font="vector" ratio="10">2015</text>
 <text x="21.9075" y="22.86" size="2.1844" layer="21" font="vector" ratio="15">ROwen</text>
 <text x="50.165" y="33.9725" size="2.1844" layer="21" font="vector" ratio="10">2015</text>
+<dimension x1="50.64125" y1="38.735" x2="12.22375" y2="38.735" x3="31.4325" y3="48.5775" textsize="1.778" layer="47"/>
+<dimension x1="12.3825" y1="57.785" x2="12.3825" y2="38.735" x3="9.2075" y3="48.26" textsize="1.778" layer="47"/>
+<dimension x1="13.97" y1="61.595" x2="20.955" y2="61.595" x3="17.4625" y3="67.6275" textsize="1.778" layer="47"/>
+<dimension x1="48.895" y1="61.595" x2="58.42" y2="61.595" x3="53.6575" y3="67.6275" textsize="1.778" layer="47"/>
+<dimension x1="13.97" y1="61.595" x2="58.42" y2="61.595" x3="36.195" y3="72.7075" textsize="1.778" layer="47"/>
+<dimension x1="41.91" y1="61.595" x2="48.895" y2="61.595" x3="45.4025" y3="67.6275" textsize="1.778" layer="47"/>
+<dimension x1="41.91" y1="61.595" x2="34.925" y2="61.595" x3="38.4175" y3="67.6275" textsize="1.778" layer="47"/>
+<dimension x1="34.925" y1="61.595" x2="27.94" y2="61.595" x3="31.4325" y3="67.6275" textsize="1.778" layer="47"/>
+<dimension x1="27.94" y1="61.595" x2="20.955" y2="61.595" x3="24.4475" y3="67.6275" textsize="1.778" layer="47"/>
+<dimension x1="18.7325" y1="35.2425" x2="31.4325" y2="35.2425" x3="25.0825" y3="35.2425" textsize="1.778" layer="47"/>
+<dimension x1="18.7325" y1="35.2425" x2="-0.3175" y2="35.2425" x3="9.2075" y3="35.2425" textsize="1.778" layer="47"/>
+<dimension x1="12.7" y1="57.785" x2="12.7" y2="65.405" x3="16.8275" y3="61.595" textsize="1.778" layer="47"/>
+<dimension x1="77.775" y1="65.395" x2="0" y2="65.395" x3="38.8875" y3="77.7875" textsize="1.778" layer="47"/>
+<dimension x1="0" y1="65.395" x2="0" y2="0.3175" x3="-6.0325" y3="32.85625" textsize="1.778" layer="47"/>
+<dimension x1="4.445" y1="60.96" x2="4.445" y2="65.405" x3="4.445" y3="63.1825" textsize="1.778" layer="47"/>
+<dimension x1="4.445" y1="60.96" x2="0" y2="60.96" x3="2.2225" y3="60.96" textsize="1.778" layer="47"/>
+<dimension x1="4.445" y1="4.7625" x2="4.445" y2="0.3175" x3="4.445" y3="2.54" textsize="1.778" layer="47"/>
+<dimension x1="4.445" y1="4.7625" x2="0" y2="4.7625" x3="2.2225" y3="4.7625" textsize="1.778" layer="47"/>
+<dimension x1="73.025" y1="4.7625" x2="77.47" y2="4.7625" x3="75.2475" y3="4.7625" textsize="1.778" layer="47"/>
+<dimension x1="73.025" y1="4.7625" x2="73.025" y2="0.3175" x3="73.025" y3="2.54" textsize="1.778" layer="47"/>
+<dimension x1="57.4675" y1="18.0975" x2="57.4675" y2="0.635" x3="57.4675" y3="9.36625" textsize="1.778" layer="47"/>
+<dimension x1="57.4675" y1="18.0975" x2="77.7875" y2="18.0975" x3="67.6275" y3="18.0975" textsize="1.778" layer="47"/>
+<dimension x1="40.3225" y1="4.445" x2="51.7525" y2="4.445" x3="46.0375" y3="-4.7625" textsize="1.778" layer="47"/>
+<dimension x1="51.7525" y1="4.445" x2="63.1825" y2="4.445" x3="57.4675" y3="-4.7625" textsize="1.778" layer="47"/>
+<dimension x1="5.08" y1="15.5575" x2="0" y2="15.5575" x3="2.54" y3="15.5575" textsize="1.778" layer="47"/>
+<dimension x1="5.08" y1="15.5575" x2="5.08" y2="0.635" x3="15.875" y3="8.09625" textsize="1.778" layer="47"/>
+<dimension x1="18.7325" y1="35.2425" x2="18.7325" y2="38.735" x3="18.7325" y3="36.98875" textsize="1.778" layer="47"/>
+<dimension x1="40.3225" y1="4.445" x2="40.3225" y2="0" x3="34.6075" y3="2.2225" textsize="1.778" layer="47"/>
+<dimension x1="79.53375" y1="60.6425" x2="79.53375" y2="19.52625" x3="83.5025" y3="40.084375" textsize="1.778" layer="47"/>
+<dimension x1="25.0825" y1="29.845" x2="25.0825" y2="35.2425" x3="25.0825" y3="32.54375" textsize="1.778" layer="47"/>
+<dimension x1="31.4325" y1="35.2425" x2="25.0825" y2="29.845" x3="28.2575" y3="29.845" textsize="1.778" layer="47" dtype="horizontal"/>
+<dimension x1="66.04" y1="60.96" x2="77.7875" y2="60.96" x3="71.91375" y3="69.85" textsize="1.778" layer="47" dtype="horizontal"/>
+<dimension x1="77.775" y1="65.395" x2="66.04" y2="60.96" x3="64.135" y3="63.1775" textsize="1.778" layer="47" dtype="vertical"/>
+<dimension x1="13.6525" y1="25.7175" x2="0" y2="25.7175" x3="6.82625" y3="25.7175" textsize="1.778" layer="47" dtype="horizontal"/>
+<dimension x1="13.6525" y1="25.7175" x2="13.6525" y2="15.5575" x3="15.875" y3="20.6375" textsize="1.778" layer="47" dtype="vertical"/>
+<dimension x1="13.6525" y1="25.7175" x2="13.6525" y2="26.9875" x3="15.875" y3="26.3525" textsize="1.778" layer="47"/>
 </plain>
 <libraries>
 <library name="#PaJa_30">

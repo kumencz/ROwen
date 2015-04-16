@@ -88,6 +88,11 @@
 <hole x="5" y="5" drill="5"/>
 <dimension x1="0" y1="0" x2="100" y2="0" x3="50" y3="-7" textsize="1.778" layer="47"/>
 <dimension x1="100" y1="0" x2="100" y2="80" x3="110" y3="40" textsize="1.778" layer="47"/>
+<dimension x1="38.1" y1="73.66" x2="38.1" y2="62.23" x3="34.925" y3="67.945" textsize="1.778" layer="47"/>
+<dimension x1="38.1" y1="73.66" x2="38.1" y2="80.01" x3="34.925" y3="76.835" textsize="1.778" layer="47"/>
+<dimension x1="38.1" y1="62.23" x2="38.1" y2="50.8" x3="34.925" y3="56.515" textsize="1.778" layer="47"/>
+<dimension x1="95" y1="75" x2="5" y2="75" x3="50" y3="88.9" textsize="1.778" layer="47"/>
+<dimension x1="5" y1="75" x2="5" y2="5" x3="-6.985" y3="40" textsize="1.778" layer="47"/>
 </plain>
 <libraries>
 <library name="resistor">
