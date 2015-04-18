@@ -1,8 +1,7 @@
-#ignore soubory vsude
-readme.txt
+#ignore files
 
 
-#ignore pracovni soubory
+#ignore folders
 obj/
 lst/
 
@@ -14,13 +13,6 @@ lst/
 *.bak
 *.bat
 *.map
-*.skalda
 *.uvopt
 *.Kuba
 *.o
-
-#ignore in Libraries/CMIS/
-STM32F3-Discovery/Fiscopter/Libraries/CMSIS/DSP_Lib/Examples/
-STM32F3-Discovery/Fiscopter/Libraries/CMSIS/DSP_Lib/Source/ARM/
-STM32F3-Discovery/Fiscopter/Libraries/CMSIS/SVD/
-STM32F3-Discovery/Fiscopter/Libraries/CMSIS/Documentation/
