@@ -13,6 +13,7 @@
 #include "hmi.h"
 #include "time.h"
 #include "power.h"
+#include "comunication.h"
 
 /* Exported types ------------------------------------------------------------*/
 
@@ -22,6 +23,6 @@
 
 
 /* Exported functions ------------------------------------------------------- */
-
+void init_all(void);
 
 #endif /* __MAIN_H */
