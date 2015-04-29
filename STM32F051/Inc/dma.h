@@ -1,9 +1,9 @@
 /**
   ******************************************************************************
-  * File Name          : TIM.h
-  * Date               : 24/04/2015 12:56:01
-  * Description        : This file provides code for the configuration
-  *                      of the TIM instances.
+  * File Name          : dma.h
+  * Date               : 24/04/2015 13:30:12
+  * Description        : This file contains all the function prototypes for
+  *                      the dma.c file
   ******************************************************************************
   *
   * COPYRIGHT(c) 2015 STMicroelectronics
@@ -33,8 +33,9 @@
   ******************************************************************************
   */
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __tim_H
-#define __tim_H
+#ifndef __dma_H
+#define __dma_H
+
 #ifdef __cplusplus
  extern "C" {
 #endif
@@ -42,18 +43,13 @@
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f0xx_hal.h"
 
-extern TIM_HandleTypeDef htim3;
-
-void MX_TIM3_Init(void);
+void MX_DMA_Init(void);
 
 #ifdef __cplusplus
 }
 #endif
-#endif /*__ tim_H */
 
-/**
-  * @}
-  */
+#endif /* __dma_H */
 
 /**
   * @}

@@ -83,6 +83,8 @@ int main(void)
   MX_I2C1_Init();
   MX_TIM3_Init();
   MX_USART1_UART_Init();
+	MX_ADC_Init();
+	MX_DMA_Init();
 
   /* USER CODE BEGIN 2 */
   init_all();
@@ -92,7 +94,7 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  period_time_check_flags();
+		period_time_check_flags();
 //		if (HAL_GPIO_ReadPin(GPIOB, GPIO_PIN_4) != GPIO_PIN_RESET)
 //		{
 //			HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_10);
@@ -149,6 +151,8 @@ void init_all(void)
 	HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_2);
 	HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_3);
 	HAL_TIM_PWM_Start(&htim3,TIM_CHANNEL_4);
+	HAL_ADC_Start_DMA(&hadc, (uint32_t *)ADC_Output,2);
+	//HAL_DMA_Start(&hdma_adc, (uint32_t)ADC1_DR_Address, (uint32_t)&ADC_Output, 1);
 	
 	GPIO_InitTypeDef GPIO_InitStruct;
 	GPIO_InitStruct.Pin = GPIO_PIN_5|GPIO_PIN_6|GPIO_PIN_7|GPIO_PIN_8|GPIO_PIN_9|GPIO_PIN_10;

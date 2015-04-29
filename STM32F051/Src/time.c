@@ -10,7 +10,7 @@
 /* Private functions ---------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
-uint8_t aTxStartMessage[] = "\n\rHallo\n\r";
+
 
 uint32_t TIM_10MS_COUNTER;
 uint32_t TIM_100MS_COUNTER;
@@ -140,21 +140,26 @@ void tim_100ms_loop(void)
 
 void tim_1000ms_loop(void)
 {
-	if(HAL_UART_Transmit_IT(&huart1, (uint8_t*)aTxStartMessage, 9)!= HAL_OK)
-  {
-    buzzer(beeps,3);
-	 buzzer_speed(30);
-  }else
-  {
-	  buzzer(beeps,1);
-	 buzzer_speed(2);
-  }
+	ADC_read();
+	send_temp(thermocouple_1);
+//	send_temp(thermocouple_2);
+//	send_temp(thermocouple_3);
+//	send_temp(thermocouple_4);
+//	send_temp(thermocouple_board);
+//	send_temp(MCU_temp);
+
+	buzzer(beeps,1);
+	buzzer_speed(2);
+
 	
 	test_counter += 5;
 	if(test_counter > 100) test_counter=0;
 	triac_set_duty(1,test_counter);
 	triac_set_duty(2,100-test_counter);
 	
+	/* SPEED meter */
 	speed = speed_counter;
 	speed_counter = 0;
+	
+	
 }

@@ -1,9 +1,9 @@
 /**
   ******************************************************************************
-  * File Name          : TIM.h
-  * Date               : 24/04/2015 12:56:01
+  * File Name          : ADC.h
+  * Date               : 24/04/2015 13:30:11
   * Description        : This file provides code for the configuration
-  *                      of the TIM instances.
+  *                      of the ADC instances.
   ******************************************************************************
   *
   * COPYRIGHT(c) 2015 STMicroelectronics
@@ -33,8 +33,8 @@
   ******************************************************************************
   */
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __tim_H
-#define __tim_H
+#ifndef __adc_H
+#define __adc_H
 #ifdef __cplusplus
  extern "C" {
 #endif
@@ -42,14 +42,14 @@
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f0xx_hal.h"
 
-extern TIM_HandleTypeDef htim3;
+extern ADC_HandleTypeDef hadc;
 
-void MX_TIM3_Init(void);
+void MX_ADC_Init(void);
 
 #ifdef __cplusplus
 }
 #endif
-#endif /*__ tim_H */
+#endif /*__ adc_H */
 
 /**
   * @}

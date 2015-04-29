@@ -1,7 +1,7 @@
 /**
   ******************************************************************************
   * @file    stm32f0xx_it.c
-  * @date    18/04/2015 10:57:03
+  * @date    24/04/2015 12:56:01
   * @brief   Interrupt Service Routines.
   ******************************************************************************
   *
@@ -41,15 +41,23 @@
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
+extern ADC_HandleTypeDef hadc;
 extern COMP_HandleTypeDef hcomp1;
 extern COMP_HandleTypeDef hcomp2;
 extern I2C_HandleTypeDef hi2c1;
 extern UART_HandleTypeDef huart1;
-
+extern DMA_HandleTypeDef hdma_adc;
 /******************************************************************************/
 /*            Cortex-M0 Processor Interruption and Exception Handlers         */ 
 /******************************************************************************/
 
+void HardFault_Handler(void)
+{
+  /* Go to infinite loop when Hard Fault exception occurs */
+  while (1)
+  {
+  }
+}
 /**
 * @brief This function handles System tick timer.
 */
@@ -67,6 +75,20 @@ void SysTick_Handler(void)
 /******************************************************************************/
 
 /**
+* @brief This function handles DMA1 channel 1 interrupt.
+*/
+void DMA1_Channel1_IRQHandler(void)
+{
+  /* USER CODE BEGIN DMA1_Channel1_IRQn 0 */
+
+  /* USER CODE END DMA1_Channel1_IRQn 0 */
+  HAL_DMA_IRQHandler(&hdma_adc);
+  /* USER CODE BEGIN DMA1_Channel1_IRQn 1 */
+
+  /* USER CODE END DMA1_Channel1_IRQn 1 */
+}
+
+/**
 * @brief This function handles ADC and COMP interrupts (COMP interrupts through EXTI lines 21 and 22).
 */
 void ADC1_COMP_IRQHandler(void)
@@ -74,6 +96,7 @@ void ADC1_COMP_IRQHandler(void)
   /* USER CODE BEGIN ADC1_COMP_IRQn 0 */
 
   /* USER CODE END ADC1_COMP_IRQn 0 */
+  HAL_ADC_IRQHandler(&hadc);
   HAL_COMP_IRQHandler(&hcomp1);
   HAL_COMP_IRQHandler(&hcomp2);
   /* USER CODE BEGIN ADC1_COMP_IRQn 1 */
