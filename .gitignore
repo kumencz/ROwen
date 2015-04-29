@@ -4,6 +4,8 @@
 #ignore folders
 obj/
 lst/
+Objects/
+Listings/
 
 #ignore files
 *.html
