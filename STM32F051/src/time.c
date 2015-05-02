@@ -135,7 +135,7 @@ void tim_1ms_loop(void)
 }
 void tim_10ms_loop(void)
 {
-	
+	i2c_process_session();
 	
 }
 
@@ -164,5 +164,10 @@ void tim_1000ms_loop(void)
 	speed = speed_counter;
 	speed_counter = 0;
 	
-	//GPIOB->ODR ^= GPIO_Pin_15;
+	GPIOB->ODR ^= GPIO_Pin_7;
+
+	//write_char("B",1);
+	//test_i2c();
+	
+	i2c_send_session(5,ADC_EXT_ADDRESS);
 }

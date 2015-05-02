@@ -42,6 +42,8 @@
 #include "time.h"
 #include "control.h"
 #include "communication.h"
+#include "i2c.h"
+
 
 
 /* Exported types ------------------------------------------------------------*/

@@ -22,7 +22,6 @@ volatile uint16_t ADC_Output[15];
 uint16_t temp[10] = {0};
 uint8_t temp_counter = 0;
 
-
 void ADC_read(void)
 {
 	/* MCU voltage */

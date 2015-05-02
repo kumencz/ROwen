@@ -18,5 +18,19 @@ typedef enum
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */
 bool send_temp(e_temp_sensor temp_sensor);
+void test_i2c(void);
 
+
+
+typedef enum
+{
+  LM75_OK = 0,
+  LM75_FAIL
+}LM75_Status_TypDef;
+
+#define LM75_FLAG_TIMEOUT         ((uint32_t)0x1000)
+#define LM75_LONG_TIMEOUT         ((uint32_t)(10 * LM75_FLAG_TIMEOUT))    
+
+#define I2C_TIMEOUT         ((uint32_t)0x3FFFF) /*!< I2C Time out */
+#define I2C_ADDR		0x20<<1
 #endif /* __COMUNICATION_H */

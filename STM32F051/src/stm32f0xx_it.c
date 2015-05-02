@@ -179,6 +179,84 @@ void EXTI4_15_IRQHandler(void)
 	}
 }
 
+
+
+
+
+void I2C1_IRQHandler(void)
+{
+	if(I2C_GetITStatus(I2C1,I2C_IT_TXIS) != RESET)
+	{
+		
+		// Odeslat pripravena data
+		if(i2c_curr_session.params_transfered < i2c_sessions[i2c_curr_session.id].param_count)
+		{	
+			I2C_SendData(I2C1, parameters_master[i2c_curr_session.params_transfered++]);
+		}else	if(i2c_curr_session.bytes_transfered < i2c_sessions[i2c_curr_session.id].byte_count)// && i2c_sessions[i2c_curr_session.id].rw == write)
+		{
+			I2C_SendData(I2C1, transfer_data_master[i2c_curr_session.bytes_transfered++]);
+		}else
+		{
+			I2C_SendData(I2C1, 0xFF);
+		}
+		
+		I2C_ClearITPendingBit(I2C1, I2C_IT_TXIS);
+	}
+	if(I2C_GetITStatus(I2C1,I2C_IT_RXNE) != RESET)
+	{
+		if(i2c_curr_session.bytes_transfered < i2c_sessions[i2c_curr_session.id].byte_count && i2c_sessions[i2c_curr_session.id].rw == read)
+		{
+			// prijmout data
+			transfer_data_master[i2c_curr_session.bytes_transfered++] = I2C_ReceiveData(I2C1);
+		}
+		// po prijeti vsech parametru nacist data k zapisu (nemusi být zadny parametr - proto tady je to!)
+		if(i2c_curr_session.bytes_transfered == i2c_sessions[i2c_curr_session.id].byte_count)
+			i2c_sessions[i2c_curr_session.id].session_data(i2c_curr_session.id,receive);
+	
+		I2C_ClearITPendingBit(I2C1, I2C_IT_RXNE);
+	}
+	if(I2C_GetITStatus(I2C1,I2C_IT_NACKI) != RESET)
+	{
+		/* Vyhodit pripadny zapsany byte navic - neodesle se pri pristim read pozadavku*/
+		I2C1->ISR = I2C_FLAG_TXE;
+		
+		I2C_ClearITPendingBit(I2C1, I2C_IT_NACKI);
+	}
+	if(I2C_GetITStatus(I2C1,I2C_IT_STOPF) != RESET)
+	{
+		// Zpracovat prijata data pokud sedi pocty parametru a prijatych bytu
+//		if(params_transfered == i2c_sessions_slave[session_id].param_count \
+//			&& bytes_transfered == i2c_sessions_slave[session_id].byte_count)
+//		{
+//			i2c_sessions_slave[session_id].process_it(write,session_id) ;
+//		}
+		// ukoncit session
+		i2c_curr_session.running = false;
+		
+		I2C_ClearITPendingBit(I2C1, I2C_IT_STOPF);
+	}
+	if(I2C_GetITStatus(I2C1,I2C_IT_BERR) != RESET)
+	{
+		// chyba na zbernici!!!
+		
+		I2C_ClearITPendingBit(I2C1, I2C_IT_BERR);
+	}
+	
+	if(I2C_GetITStatus(I2C1,I2C_IT_TC) != RESET)
+	{
+
+		if(i2c_sessions[i2c_curr_session.id].param_count == i2c_curr_session.params_transfered)
+		{
+			/* Configure slave address, nbytes, reload, end mode and start or stop generation */
+			I2C_TransferHandling(I2C1, i2c_curr_session.dest_address, \
+			i2c_sessions[i2c_curr_session.id].byte_count, \
+			I2C_AutoEnd_Mode, \
+			((i2c_sessions[i2c_curr_session.id].rw == read)? I2C_Generate_Start_Read : I2C_Generate_Start_Write));
+		}
+		I2C_ClearITPendingBit(I2C1, I2C_IT_TC);
+	}
+}
+
 /**
   * @}
   */ 

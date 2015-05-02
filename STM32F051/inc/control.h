@@ -4,7 +4,7 @@
 #include "stm32f0xx.h"
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
-struct sys
+extern struct sys
 {
 	struct{
 		uint16_t thermocouple_1;
@@ -17,9 +17,8 @@ struct sys
 	struct{
 		uint16_t mcu_voltage;
 	}s_power;
-};
+}s_system;
 
-extern struct sys s_system;
 extern volatile uint16_t ADC_Output[15];
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */

@@ -24,12 +24,19 @@ extern uint8_t buzzer_beeps_counter;
 extern uint8_t buzzer_beep_time;
 extern uint16_t buzzer_beep_time_counter;
 extern uint16_t buttons_delay[5];
+
+extern uint8_t display[4];
+extern const uint8_t charset[4][255];
 /* Exported macro ------------------------------------------------------------*/
 #define button_press_delay			500
+
 
 /* Exported functions ------------------------------------------------------- */
 void buzzer_speed(uint8_t speed);
 void buzzer(e_buzzer_mode b_mode, uint8_t beep_count);
 void button_handler(e_buttons button);
 void encoder_handler(void);
+void write_char(char* character, uint8_t display_id);
 #endif /* __HMI_H */
+
+
