@@ -92,6 +92,8 @@ void PendSV_Handler(void)
   */
 void SysTick_Handler(void)
 {
+	Period_timer_increment();
+	
 }
 
 /******************************************************************************/
@@ -109,6 +111,73 @@ void SysTick_Handler(void)
 /*void PPP_IRQHandler(void)
 {
 }*/
+
+
+/**
+  * @brief  This function handles External line 0 and 1 interrupt requests.
+  * @param  None
+  * @retval None
+  */
+void EXTI2_3_IRQHandler(void)
+{
+	if(EXTI_GetITStatus(EXTI_Line3) != RESET)
+	{
+		encoder_handler();
+		/* Clear the EXTI line 5 pending bit */
+		EXTI_ClearITPendingBit(EXTI_Line3);
+	}
+}
+
+
+void EXTI4_15_IRQHandler(void)
+{
+	if(EXTI_GetITStatus(EXTI_Line4) != RESET)
+	{
+		if(buttons_delay[button_enc] == 0)
+		{
+			button_handler(button_enc);
+		}
+		/* Clear the EXTI line 5 pending bit */
+		EXTI_ClearITPendingBit(EXTI_Line4);
+	}
+	if(EXTI_GetITStatus(EXTI_Line5) != RESET)
+	{
+		if(buttons_delay[button_4] == 0)
+		{
+			button_handler(button_4);
+		}
+		/* Clear the EXTI line 5 pending bit */
+		EXTI_ClearITPendingBit(EXTI_Line5);
+	}
+	if(EXTI_GetITStatus(EXTI_Line12) != RESET)
+	{
+		if(buttons_delay[button_3] == 0)
+		{
+			button_handler(button_3);
+		}
+		/* Clear the EXTI line 12 pending bit */
+		EXTI_ClearITPendingBit(EXTI_Line12);
+	}
+	if(EXTI_GetITStatus(EXTI_Line13) != RESET)
+	{
+		if(buttons_delay[button_2] == 0)
+		{
+			button_handler(button_2);
+		}
+		
+		/* Clear the EXTI line 13 pending bit */
+		EXTI_ClearITPendingBit(EXTI_Line13);
+	}
+	if(EXTI_GetITStatus(EXTI_Line14) != RESET)
+	{
+		if(buttons_delay[button_1] == 0)
+		{
+			button_handler(button_1);
+		}
+		/* Clear the EXTI line 14 pending bit */
+		EXTI_ClearITPendingBit(EXTI_Line14);
+	}
+}
 
 /**
   * @}

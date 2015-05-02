@@ -54,13 +54,14 @@ int main(void)
        system_stm32f0xx.c file
      */ 
       
-  /* Add your application code here
-     */
-
+  /* Add your application code here */
+	SystemCoreClockUpdate();
+	initialization();
   /* Infinite loop */
   while (1)
   {
-
+		period_time_check_flags();
+		speed_counter++;
   }
 }
 

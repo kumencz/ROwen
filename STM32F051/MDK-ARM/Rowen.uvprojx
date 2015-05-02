@@ -50,7 +50,7 @@
           <OutputName>Rowen</OutputName>
           <CreateExecutable>1</CreateExecutable>
           <CreateLib>0</CreateLib>
-          <CreateHexFile>0</CreateHexFile>
+          <CreateHexFile>1</CreateHexFile>
           <DebugInformation>1</DebugInformation>
           <BrowseInformation>1</BrowseInformation>
           <ListingPath>.\Listings\</ListingPath>
@@ -347,7 +347,7 @@
           </ArmAdsMisc>
           <Cads>
             <interw>1</interw>
-            <Optim>1</Optim>
+            <Optim>4</Optim>
             <oTime>0</oTime>
             <SplitLS>0</SplitLS>
             <OneElfS>1</OneElfS>
@@ -365,7 +365,7 @@
               <MiscControls></MiscControls>
               <Define>USE_STDPERIPH_DRIVER, STM32F051</Define>
               <Undefine></Undefine>
-              <IncludePath>..\inc;..\STM32F0xx_StdPeriph_Driver\inc;.\RTE\Device\STM32F051C4;.\RTE\;..\CMSIS_Include</IncludePath>
+              <IncludePath>.\RTE\Device\STM32F051C4;.\RTE;..\CMSIS_Include;..\STM32F0xx_StdPeriph_Driver\inc;..\inc</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -417,6 +417,36 @@
               <FileName>stm32f0xx_it.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\src\stm32f0xx_it.c</FilePath>
+            </File>
+            <File>
+              <FileName>time.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\time.c</FilePath>
+            </File>
+            <File>
+              <FileName>comunication.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\comunication.c</FilePath>
+            </File>
+            <File>
+              <FileName>control.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\control.c</FilePath>
+            </File>
+            <File>
+              <FileName>hmi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\hmi.c</FilePath>
+            </File>
+            <File>
+              <FileName>power.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\power.c</FilePath>
+            </File>
+            <File>
+              <FileName>init.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\src\init.c</FilePath>
             </File>
           </Files>
         </Group>
