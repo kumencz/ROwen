@@ -18,17 +18,17 @@
 	
 struct sys s_system;
 
-volatile uint16_t ADC_Output[15];
+volatile uint16_t ADC_Output[2];
 uint16_t temp[10] = {0};
 uint8_t temp_counter = 0;
 
 void ADC_read(void)
 {
 	/* MCU voltage */
-	s_system.s_power.mcu_voltage = 3300.0f * VREFINT_CAL / ADC_Output[8];
+	s_system.s_power.mcu_voltage = 3300.0f * VREFINT_CAL / ADC_Output[1];
 	
 	/* Temperature */
-	temp[temp_counter] = (uint16_t)((((((ADC_Output[7] / 3300.0f) * s_system.s_power.mcu_voltage) - TS_CAL1) / (-AVG_SLOPE)) + 30)*10);	
+	temp[temp_counter] = (uint16_t)((((((ADC_Output[0] / 3300.0f) * s_system.s_power.mcu_voltage) - TS_CAL1) / (-AVG_SLOPE)) + 30)*10);
 	s_system.s_temp.MCU_temp = (temp[0] + temp[1] + temp[2] + temp[3] + temp[4] + temp[5] + temp[6] + temp[7] + temp[8] + temp[9])/10;
 	if(++temp_counter > 9)
 		temp_counter = 0;

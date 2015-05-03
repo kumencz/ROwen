@@ -19,13 +19,14 @@ void init_USART(void);
 void init_I2C(void);
 void init_Flash(void);
 void init_I2C(void);
+void init_ADC(void);
 
 void initialization(void)
 {
 	init_SysTick();
 	init_I2C();
 	init_Board_HMI();
-	//	init_ADC();
+	init_ADC();
 //	init_USART();
 //	init_I2C();
 //	init_Flash();
@@ -193,4 +194,99 @@ void init_Board_HMI(void)
 	
 	/* Init tcn75 temp sensor */
 	i2c_send_session(3,TEMP_TCN75A_ADDRESS);
+}
+
+void init_ADC(void)
+{
+	ADC_InitTypeDef     ADC_InitStructure;
+	TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;
+	DMA_InitTypeDef     DMA_InitStructure;
+		
+	/* Periph clock	enable *******************************************************/
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_TIM15, ENABLE);
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_ADC1, ENABLE);
+	RCC_AHBPeriphClockCmd(RCC_AHBPeriph_DMA1 , ENABLE);
+
+	/* TIM15 Configuration *******************************************************/
+	TIM_DeInit(TIM15);
+	TIM_TimeBaseStructInit(&TIM_TimeBaseStructure);
+	 
+	/* Time base configuration */
+	TIM_TimeBaseStructure.TIM_Period = 10;
+	TIM_TimeBaseStructure.TIM_Prescaler = SystemCoreClock/1000;
+	TIM_TimeBaseStructure.TIM_ClockDivision = 0x0;
+	TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;  
+	TIM_TimeBaseInit(TIM15, &TIM_TimeBaseStructure);
+
+	/* TIM15 TRGO selection */
+	TIM_SelectOutputTrigger(TIM15, TIM_TRGOSource_Update);
+
+
+	/* DMA1 Configuration *******************************************************/
+	/* DMA1 Channel1 Config */
+	DMA_DeInit(DMA1_Channel1);
+	DMA_InitStructure.DMA_PeripheralBaseAddr = (uint32_t)ADC1_DR_Address;
+	DMA_InitStructure.DMA_MemoryBaseAddr = (uint32_t)ADC_Output;
+	DMA_InitStructure.DMA_DIR = DMA_DIR_PeripheralSRC;
+	DMA_InitStructure.DMA_BufferSize = 2;
+	DMA_InitStructure.DMA_PeripheralInc = DMA_PeripheralInc_Disable;
+	DMA_InitStructure.DMA_MemoryInc = DMA_MemoryInc_Enable;
+	DMA_InitStructure.DMA_PeripheralDataSize = DMA_PeripheralDataSize_HalfWord;
+	DMA_InitStructure.DMA_MemoryDataSize = DMA_MemoryDataSize_HalfWord;
+	DMA_InitStructure.DMA_Mode = DMA_Mode_Circular;
+	DMA_InitStructure.DMA_Priority = DMA_Priority_Medium;
+	DMA_InitStructure.DMA_M2M = DMA_M2M_Disable;
+	DMA_Init(DMA1_Channel1, &DMA_InitStructure);
+
+
+	/* ADC1 Configuration *******************************************************/
+	/* ADC1 DeInit */  
+	ADC_DeInit(ADC1);
+
+	/* ADC DMA request in circular mode */
+	ADC_DMARequestModeConfig(ADC1, ADC_DMAMode_Circular);
+
+	/* Initialize ADC structure */
+	ADC_StructInit(&ADC_InitStructure);
+
+	 /* Configure the ADC1 in continous mode withe a resolutuion equal to 12 bits*/
+	ADC_InitStructure.ADC_Resolution = ADC_Resolution_12b;
+	ADC_InitStructure.ADC_ContinuousConvMode = DISABLE;
+	ADC_InitStructure.ADC_ExternalTrigConvEdge = ADC_ExternalTrigConvEdge_Rising;    
+	ADC_InitStructure.ADC_ExternalTrigConv = ADC_ExternalTrigConv_T15_TRGO;
+	ADC_InitStructure.ADC_DataAlign = ADC_DataAlign_Right;
+	ADC_InitStructure.ADC_ScanDirection = ADC_ScanDirection_Upward;
+	ADC_Init(ADC1, &ADC_InitStructure); 
+
+	ADC_ChannelConfig(ADC1, ADC_Channel_TempSensor , ADC_SampleTime_239_5Cycles);  
+	ADC_ChannelConfig(ADC1, ADC_Channel_Vrefint , ADC_SampleTime_239_5Cycles);
+
+	/* Enable internal sensors */
+	ADC_TempSensorCmd(ENABLE);
+	ADC_VrefintCmd(ENABLE);
+	//ADC_VbatCmd(ENABLE);
+
+	/* ADC Calibration */
+	ADC_GetCalibrationFactor(ADC1);
+
+	/* Enable the auto delay feature */    
+	ADC_WaitModeCmd(ADC1, ENABLE); 
+
+/*=================== STARTING ========================*/
+
+	/* Enable ADCperipheral */
+	ADC_Cmd(ADC1, ENABLE);     
+	/* Wait the ADEN flag */
+	while(!ADC_GetFlagStatus(ADC1, ADC_FLAG_ADEN)); 
+
+	/* Enable ADC_DMA */
+	ADC_DMACmd(ADC1, ENABLE);
+	/* TIM15 enable counter */
+	TIM_Cmd(TIM15, ENABLE);
+
+	/* ADC1 regular Software Start Conv */ 
+	ADC_StartOfConversion(ADC1);
+
+	/* DMA1 Channel1 enable */
+	DMA_Cmd(DMA1_Channel1, ENABLE);
 }

@@ -146,7 +146,7 @@ void tim_100ms_loop(void)
 
 void tim_1000ms_loop(void)
 {
-//	ADC_read();
+	ADC_read();
 //	send_temp(thermocouple_1);
 //	send_temp(thermocouple_2);
 //	send_temp(thermocouple_3);
@@ -169,5 +169,5 @@ void tim_1000ms_loop(void)
 	//write_char("B",1);
 	//test_i2c();
 	
-	i2c_send_session(5,ADC_EXT_ADDRESS);
+	i2c_send_session(4,TEMP_TCN75A_ADDRESS);
 }

@@ -19,7 +19,7 @@ extern struct sys
 	}s_power;
 }s_system;
 
-extern volatile uint16_t ADC_Output[15];
+extern volatile uint16_t ADC_Output[2];
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */
 void ADC_read(void);
