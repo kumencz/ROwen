@@ -20,6 +20,7 @@ void init_I2C(void);
 void init_Flash(void);
 void init_I2C(void);
 void init_ADC(void);
+void init_USART(void);
 
 void initialization(void)
 {
@@ -27,7 +28,7 @@ void initialization(void)
 	init_I2C();
 	init_Board_HMI();
 	init_ADC();
-//	init_USART();
+	init_USART();
 //	init_I2C();
 //	init_Flash();
 }
@@ -201,7 +202,7 @@ void init_ADC(void)
 	ADC_InitTypeDef     ADC_InitStructure;
 	TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;
 	DMA_InitTypeDef     DMA_InitStructure;
-		
+
 	/* Periph clock	enable *******************************************************/
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_TIM15, ENABLE);
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_ADC1, ENABLE);
@@ -289,4 +290,47 @@ void init_ADC(void)
 
 	/* DMA1 Channel1 enable */
 	DMA_Cmd(DMA1_Channel1, ENABLE);
+}
+
+void init_USART(void)
+{
+	GPIO_InitTypeDef GPIO_InitStructure;
+	USART_InitTypeDef USART_InitStructure;
+	NVIC_InitTypeDef NVIC_InitStructure_USART1;
+
+	/* Enable clocks */
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE);
+	RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOA, ENABLE);
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1, ENABLE);
+
+	/* GPIO configuration */
+	GPIO_InitStructure.GPIO_Pin =  GPIO_Pin_9 | GPIO_Pin_10;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
+	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
+	GPIO_Init(GPIOA, &GPIO_InitStructure);
+
+	GPIO_PinAFConfig(GPIOA, GPIO_PinSource9, GPIO_AF_1);
+	GPIO_PinAFConfig(GPIOA, GPIO_PinSource10, GPIO_AF_1);
+
+	/* USART configuration */
+	USART_InitStructure.USART_BaudRate = 115200;
+	USART_InitStructure.USART_WordLength = USART_WordLength_8b;
+	USART_InitStructure.USART_StopBits = USART_StopBits_1;
+	USART_InitStructure.USART_Parity = USART_Parity_No;
+	USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
+	USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;
+	USART_Init(USART1, &USART_InitStructure);
+
+	USART_ITConfig(USART1, USART_IT_RXNE, ENABLE);
+
+	/* Enable the USART1 Interrupts */
+	NVIC_InitStructure_USART1.NVIC_IRQChannel = USART1_IRQn;
+	NVIC_InitStructure_USART1.NVIC_IRQChannelPriority = 1;
+	NVIC_InitStructure_USART1.NVIC_IRQChannelCmd = ENABLE;
+	NVIC_Init(&NVIC_InitStructure_USART1);
+
+	/* Enable USART1 */
+	USART_Cmd(USART1, ENABLE);
 }

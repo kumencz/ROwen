@@ -1,7 +1,6 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 
-
 /* Private typedef -----------------------------------------------------------*/
 
 /* Private define ------------------------------------------------------------*/
@@ -11,16 +10,30 @@
 /* Private functions ---------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
-void send_temps(void)
+
+uint8_t RX_Buffer[5][MAX_MESSAGE_LENGHT];
+uint8_t RX_r_pointer = 0;
+uint8_t RX_w_pointer = 0;
+
+uint8_t TX_Buffer[5][50];
+uint8_t TX_r_pointer = 0;
+uint8_t TX_w_pointer = 0;
+
+volatile uint8_t received_string[MAX_MESSAGE_LENGHT+1];
+
+void USART_puts(USART_TypeDef* USARTx, volatile char *s)
 {
-	char send_it[100] = {0};
-	sprintf(send_it, "#%d=temp/%d/%d/%d/%d/%d/%d$\n\r",\
-	(uint32_t)real_time,\
-	(uint8_t)s_system.s_temp.thermocouple_1,\
-	(uint8_t)s_system.s_temp.thermocouple_2,\
-	(uint8_t)s_system.s_temp.thermocouple_3,\
-	(uint8_t)s_system.s_temp.thermocouple_4,\
-	(uint8_t)s_system.s_temp.thermocouple_board,\
-	(uint8_t)(s_system.s_temp.MCU_temp/10));
-	USART_puts(USART1,send_it);
+	while(*s){
+		// wait until data register is empty
+		while( !(USARTx->ISR & USART_FLAG_TC) );
+		USART_SendData(USARTx, *s);
+		*s++;
+	}
 }
+
+void uart_parse(uint8_t * string)
+{
+	
+	
+}
+

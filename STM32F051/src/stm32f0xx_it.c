@@ -257,6 +257,25 @@ void I2C1_IRQHandler(void)
 	}
 }
 
+void USART1_IRQHandler(void)
+{
+	if(USART_GetITStatus(USART1, USART_IT_RXNE) )
+	{
+		static uint8_t mess_lenght = 0; //string length
+		char t = USART1->RDR; // receive character
+		
+		if( (t != 'n') && (mess_lenght < MAX_MESSAGE_LENGHT) ){
+			received_string[mess_lenght] = t;
+			mess_lenght++;
+		}
+		else
+		{
+			mess_lenght = 0;
+			uart_parse((uint8_t*)received_string);
+			//USART_puts(USART1, received_string);
+		}
+	}
+}
 /**
   * @}
   */ 

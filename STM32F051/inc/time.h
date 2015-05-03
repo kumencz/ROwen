@@ -6,7 +6,7 @@
 /* Exported constants --------------------------------------------------------*/
 extern uint32_t speed_counter;
 extern uint32_t speed;
-
+extern uint32_t real_time;
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */
 void Delay(__IO uint32_t nTime);

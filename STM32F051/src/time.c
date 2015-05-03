@@ -10,11 +10,11 @@
 /* Private functions ---------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
+uint32_t real_time = 0;		//presnost = 0.1s
 
-
-uint32_t TIM_10MS_COUNTER;
-uint32_t TIM_100MS_COUNTER;
-uint32_t TIM_1000MS_COUNTER;
+uint8_t TIM_10MS_COUNTER;
+uint16_t TIM_100MS_COUNTER;
+uint16_t TIM_1000MS_COUNTER;
 
 uint8_t TIM_1MS_FLAG;
 uint8_t TIM_10MS_FLAG;
@@ -128,8 +128,6 @@ void tim_1ms_loop(void)
 				}
 				buzzer_beeps_counter--;
 			}
-	
-	
 		}
 	}
 }
@@ -141,33 +139,25 @@ void tim_10ms_loop(void)
 
 void tim_100ms_loop(void)
 { 
-	
+	real_time++;
+	ADC_read();
+	i2c_send_session(4,TEMP_TCN75A_ADDRESS); //get temp from TCN75A
+	send_temps();
 }
 
 void tim_1000ms_loop(void)
 {
-	ADC_read();
-//	send_temp(thermocouple_1);
-//	send_temp(thermocouple_2);
-//	send_temp(thermocouple_3);
-//	send_temp(thermocouple_4);
-//	send_temp(thermocouple_board);
-//	send_temp(MCU_temp);
-//	buzzer(beeps,1);
-//	buzzer_speed(2);
-
 //	test_counter += 5;
 //	if(test_counter > 100) test_counter=0;
 //	triac_set_duty(1,test_counter);
 //	triac_set_duty(2,100-test_counter);
-	/* SPEED meter */
-	speed = speed_counter;
-	speed_counter = 0;
+	
 	
 	GPIOB->ODR ^= GPIO_Pin_7;
 
-	//write_char("B",1);
-	//test_i2c();
-	
-	i2c_send_session(4,TEMP_TCN75A_ADDRESS);
+	write_char("B",1);
+
+	/* SPEED meter */
+	speed = speed_counter;
+	speed_counter = 0;
 }

@@ -43,6 +43,7 @@
 #include "control.h"
 #include "communication.h"
 #include "i2c.h"
+#include "uart.h"
 
 
 

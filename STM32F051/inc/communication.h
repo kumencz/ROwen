@@ -17,8 +17,7 @@ typedef enum
 
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */
-bool send_temp(e_temp_sensor temp_sensor);
-void test_i2c(void);
+void send_temps(void);
 
 
 
