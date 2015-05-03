@@ -275,6 +275,17 @@ void USART1_IRQHandler(void)
 			//USART_puts(USART1, received_string);
 		}
 	}
+	if(USART_GetITStatus(USART1, USART_IT_TXE) != RESET)
+	{   
+		/* Write one byte to the transmit data register */
+		USART_SendData(USART1, *TX_Buffer);
+		if(!*TX_Buffer)
+		{
+			next_message = true;
+			USART_ITConfig(USART1, USART_IT_TXE, DISABLE);
+		}else
+			*TX_Buffer++;
+	}
 }
 /**
   * @}
