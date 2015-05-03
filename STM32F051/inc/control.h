@@ -11,7 +11,7 @@ extern struct sys
 		uint16_t thermocouple_2;
 		uint16_t thermocouple_3;
 		uint16_t thermocouple_4;
-		uint16_t thermocouple_board;
+		float		 thermocouple_board;
 		uint16_t MCU_temp;
 	}s_temp;
 	struct{

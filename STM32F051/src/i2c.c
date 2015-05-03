@@ -131,7 +131,7 @@ void get_tcn75_temp(uint8_t session_id, e_direction direction)
 	if(direction == transmit)
 		parameters_master[0] = 0x00;
 	else
-		s_system.s_temp.thermocouple_board = (uint16_t)((transfer_data_master[0] <<8) + transfer_data_master[1]);
+		s_system.s_temp.thermocouple_board = (float)((((transfer_data_master[0] << 8) | transfer_data_master[1])>>4)*0.0625f);
 }
 void conf_ADC(uint8_t session_id, e_direction direction)
 {
