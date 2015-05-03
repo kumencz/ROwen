@@ -130,18 +130,18 @@ void tim_1ms_loop(void)
 			}
 		}
 	}
+	
 }
 void tim_10ms_loop(void)
 {
 	i2c_process_session();
-	
 }
 
 void tim_100ms_loop(void)
 { 
 	real_time++;
 	ADC_read();
-	i2c_send_session(4,TEMP_TCN75A_ADDRESS); //get temp from TCN75A
+	i2c_send_session(session_get_tcn75_temp,TEMP_TCN75A_ADDRESS); //get temp from TCN75A
 	send_temps();
 }
 

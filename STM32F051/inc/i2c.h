@@ -11,6 +11,14 @@ typedef enum {
 	transmit
 }e_direction;
 
+typedef enum {
+	session_expander_config = 1,
+	session_expander_set,
+	session_config_tcn75_temp,
+	session_get_tcn75_temp,
+	session_conf_ADC
+}e_i2c_session;
+
 extern struct i2c_sess {
 	e_rw rw;
 	uint8_t byte_count;
@@ -28,7 +36,7 @@ extern struct i2c_curr_sess {
 }i2c_curr_session;
 
 extern struct i2c_sess_buff {
-	uint8_t session_id;
+	e_i2c_session session_id;
 	uint8_t slave_address;
 }i2c_sessions_buffer[21];
 
@@ -41,7 +49,7 @@ extern uint8_t transfer_data_master[0xFF];
 /* Exported macro ------------------------------------------------------------*/
 
 /* Exported functions ------------------------------------------------------- */
-bool i2c_send_session(uint8_t session_id, uint8_t slave_address);
+bool i2c_send_session(e_i2c_session session_id, uint8_t slave_address);
 void i2c_process_session(void);
 void Define_I2C_Sessions(void);
 

@@ -217,6 +217,6 @@ void write_char(char* character, uint8_t display_id)
 {
 	display[display_id] = charset[display_id][(uint8_t)*character];
 	
-	i2c_send_session(2,GPIO_EXPANDER_0_ADDRESS);
-	i2c_send_session(2,GPIO_EXPANDER_1_ADDRESS);
+	i2c_send_session(session_expander_set,GPIO_EXPANDER_0_ADDRESS);
+	i2c_send_session(session_expander_set,GPIO_EXPANDER_1_ADDRESS);
 }

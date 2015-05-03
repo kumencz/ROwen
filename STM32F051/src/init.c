@@ -190,11 +190,11 @@ void init_Board_HMI(void)
 	
 	
 	/* Init displays */
-	i2c_send_session(1,GPIO_EXPANDER_0_ADDRESS);
-	i2c_send_session(1,GPIO_EXPANDER_1_ADDRESS);
+	i2c_send_session(session_expander_config,GPIO_EXPANDER_0_ADDRESS);
+	i2c_send_session(session_expander_config,GPIO_EXPANDER_1_ADDRESS);
 	
 	/* Init tcn75 temp sensor */
-	i2c_send_session(3,TEMP_TCN75A_ADDRESS);
+	i2c_send_session(session_config_tcn75_temp,TEMP_TCN75A_ADDRESS);
 }
 
 void init_ADC(void)

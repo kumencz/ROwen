@@ -26,7 +26,7 @@ struct i2c_sess_buff i2c_sessions_buffer[21];
 uint8_t i2c_sb_r_pointer = 0;
 uint8_t i2c_sb_w_pointer = 0;
 
-bool i2c_send_session(uint8_t session_id, uint8_t slave_address)
+bool i2c_send_session(e_i2c_session session_id, uint8_t slave_address)
 {
 	if(i2c_sb_w_pointer+1 != i2c_sb_r_pointer && !(i2c_sb_w_pointer == 20 && i2c_sb_r_pointer == 0))
 	{
