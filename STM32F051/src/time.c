@@ -25,7 +25,6 @@ uint8_t test_counter = 0;
 uint32_t speed_counter = 0;
 uint32_t speed = 0;
 static volatile uint32_t TimingDelay;
-
 inline void Delay(__IO uint32_t nTime)
 { 
   TimingDelay = nTime;
@@ -141,24 +140,23 @@ void tim_100ms_loop(void)
 	real_time++;
 	ADC_read();
 	i2c_send_session(session_get_tcn75_temp,TEMP_TCN75A_ADDRESS); //get temp from TCN75A
-	send_temps();
+	
 }
 
 void tim_1000ms_loop(void)
 {
-//	test_counter += 5;
-//	if(test_counter > 100) test_counter=0;
 //	triac_set_duty(1,test_counter);
 //	triac_set_duty(2,100-test_counter);
 	
 	
+	
+	i2c_send_session(session_get_ADC_voltages,ADC_EXT_ADDRESS);
+	write_to_display(s_system.s_temp.thermocouple[2]);
+	send_temps();
+	
+	/* running LED blink */
 	GPIOB->ODR ^= GPIO_Pin_7;
-
-	//write_char("B",1);
-
 	/* SPEED meter */
 	speed = speed_counter;
 	speed_counter = 0;
-	
-	i2c_send_session(session_get_ADC_voltages,ADC_EXT_ADDRESS);
 }

@@ -145,7 +145,6 @@ void get_ADC_voltages(uint8_t session_id, e_direction direction)
 		parameters_master[0] = (0x1<<7)|(ADC_channel<<5)|0x1F;
 	}else
 	{
-		//USART_puts(USART1, (volatile char *)transfer_data_master);
 		ADC_read = (int32_t)(((uint32_t)transfer_data_master[0]<<24) |  
 			((uint32_t)transfer_data_master[1]<<16) | 
 			((uint32_t)transfer_data_master[2]<<8))/256;

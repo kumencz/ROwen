@@ -22,6 +22,6 @@ void send_temps(void)
 	(uint8_t)s_system.s_temp.thermocouple[3],\
 	(uint8_t)s_system.s_temp.thermocouple_board,\
 	(uint8_t)(s_system.s_temp.MCU_temp/10),\
-	s_system.s_power.ADC_uvolt[2]);
+	(uint16_t)s_system.s_power.ADC_uvolt[2]);
 	USART_puts(USART1,send_it);
 }

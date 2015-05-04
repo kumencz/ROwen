@@ -14,7 +14,7 @@
 
 void triac_set_duty(uint8_t triac_id, uint8_t duty)
 {
-	duty = TIM3->ARR*((100-duty)/(100.0f));
+	//duty = TIM3->ARR*((100-duty)/(100.0f));
 	
 	switch(triac_id)
 	{
