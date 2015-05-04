@@ -7,15 +7,13 @@
 extern struct sys
 {
 	struct{
-		uint16_t thermocouple_1;
-		uint16_t thermocouple_2;
-		uint16_t thermocouple_3;
-		uint16_t thermocouple_4;
-		float		 thermocouple_board;
-		uint16_t MCU_temp;
+		uint16_t		thermocouple[4];
+		uint16_t			thermocouple_board;
+		uint16_t		MCU_temp;
 	}s_temp;
 	struct{
 		uint16_t mcu_voltage;
+		int32_t ADC_uvolt[4];
 	}s_power;
 }s_system;
 

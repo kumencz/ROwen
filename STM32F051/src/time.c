@@ -130,7 +130,6 @@ void tim_1ms_loop(void)
 			}
 		}
 	}
-	
 }
 void tim_10ms_loop(void)
 {
@@ -155,9 +154,11 @@ void tim_1000ms_loop(void)
 	
 	GPIOB->ODR ^= GPIO_Pin_7;
 
-	write_char("B",1);
+	//write_char("B",1);
 
 	/* SPEED meter */
 	speed = speed_counter;
 	speed_counter = 0;
+	
+	i2c_send_session(session_get_ADC_voltages,ADC_EXT_ADDRESS);
 }

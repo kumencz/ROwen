@@ -10,11 +10,8 @@
 /* Private functions ---------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
-uint8_t parameters[0xFF];
-uint8_t transfer_data[0xFF];
-
-uint8_t parameters_master[0xFF];
-uint8_t transfer_data_master[0xFF];
+uint8_t parameters_master[0x0A];
+uint8_t transfer_data_master[0x0A];
 
 struct i2c_sess i2c_sessions[32];
 struct i2c_curr_sess i2c_curr_session;
@@ -25,6 +22,8 @@ struct i2c_curr_sess i2c_curr_session;
 struct i2c_sess_buff i2c_sessions_buffer[21];
 uint8_t i2c_sb_r_pointer = 0;
 uint8_t i2c_sb_w_pointer = 0;
+
+
 
 bool i2c_send_session(e_i2c_session session_id, uint8_t slave_address)
 {
@@ -61,6 +60,8 @@ void i2c_process_session(void)
 }
 void Define_I2C_Sessions(void)
 {
+	
+	// PREDELAT na KONSTANTU !!!!!!!!
 	for(int i = 0; i < 64;i++)
 	{
 		i2c_sessions[i].rw = write;
@@ -93,11 +94,11 @@ void Define_I2C_Sessions(void)
 	i2c_sessions[0x04].byte_count = 2;
 	i2c_sessions[0x04].session_data = get_tcn75_temp;
 	
-	// conf ADC
-	i2c_sessions[0x05].rw = write;
+	// get ADC
+	i2c_sessions[0x05].rw = read;
 	i2c_sessions[0x05].param_count = 1;
-	i2c_sessions[0x05].byte_count = 0;
-	i2c_sessions[0x05].session_data = conf_ADC;
+	i2c_sessions[0x05].byte_count = 4;
+	i2c_sessions[0x05].session_data = get_ADC_voltages;
 }
 
 
@@ -133,8 +134,37 @@ void get_tcn75_temp(uint8_t session_id, e_direction direction)
 	else
 		s_system.s_temp.thermocouple_board = (float)((((transfer_data_master[0] << 8) | transfer_data_master[1])>>4)*0.0625f);
 }
-void conf_ADC(uint8_t session_id, e_direction direction)
+void get_ADC_voltages(uint8_t session_id, e_direction direction)
 {
-	parameters_master[0] = 0x00;
-	//s_system.s_temp.thermocouple_board = (uint16_t)((transfer_data_master[0] <<8) + transfer_data_master[1]);
+	static uint16_t ADC_channel = 2;
+//	int attempts = 0;
+	int32_t ADC_read;
+
+	if(direction == transmit)
+	{
+		parameters_master[0] = (0x1<<7)|(ADC_channel<<5)|0x1F;
+	}else
+	{
+		//USART_puts(USART1, (volatile char *)transfer_data_master);
+		ADC_read = (int32_t)(((uint32_t)transfer_data_master[0]<<24) |  
+			((uint32_t)transfer_data_master[1]<<16) | 
+			((uint32_t)transfer_data_master[2]<<8))/256;
+		
+		/*
+			ADC_read*1.953125f => napeti v uV
+			K thermocouple -> 40uV/stupenC
+			ADC_read/20.48 = stupne C
+		*/
+		
+		s_system.s_power.ADC_uvolt[(transfer_data_master[3]>>5) & 0x03] = (int32_t)(ADC_read*1.953125f);
+		s_system.s_temp.thermocouple[(transfer_data_master[3]>>5) & 0x03] = (ADC_read/20.48f)+s_system.s_temp.thermocouple_board;
+		
+//		if(ADC_channel++ < 3 && attempts++ < 10)
+//			i2c_send_session(session_get_ADC_voltages,ADC_EXT_ADDRESS);
+//		else
+//		{
+//			ADC_channel = 0;
+//			attempts = 0;
+//		}
+	}
 }
