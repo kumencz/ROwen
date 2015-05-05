@@ -24,6 +24,7 @@ extern uint8_t buzzer_beeps_counter;
 extern uint16_t buzzer_beep_time;
 extern uint16_t buzzer_beep_time_counter;
 extern uint16_t buttons_delay[5];
+extern uint16_t display_block;
 
 extern uint8_t display[4];
 extern const uint8_t charset[4][255];

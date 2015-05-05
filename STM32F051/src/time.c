@@ -129,6 +129,8 @@ void tim_1ms_loop(void)
 			}
 		}
 	}
+	if(display_block != 0)
+		display_block--;
 }
 void tim_10ms_loop(void)
 {
@@ -138,21 +140,17 @@ void tim_10ms_loop(void)
 void tim_100ms_loop(void)
 { 
 	real_time++;
+	i2c_send_session(session_get_ext_ADC_voltages,ADC_EXT_ADDRESS);
 	ADC_read();
 	i2c_send_session(session_get_tcn75_temp,TEMP_TCN75A_ADDRESS); //get temp from TCN75A
-	
+	write_to_display(s_system.s_temp.thermocouple[2]);
 }
 
 void tim_1000ms_loop(void)
 {
 //	triac_set_duty(1,test_counter);
 //	triac_set_duty(2,100-test_counter);
-	
-	
-	
-	i2c_send_session(session_get_ADC_voltages,ADC_EXT_ADDRESS);
-	write_to_display(s_system.s_temp.thermocouple[2]);
-	send_temps();
+	uart_send_temps();
 	
 	/* running LED blink */
 	GPIOB->ODR ^= GPIO_Pin_7;

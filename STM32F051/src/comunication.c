@@ -11,7 +11,7 @@
 /* Private functions ---------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
-void send_temps(void)
+void uart_send_temps(void)
 {
 	char send_it[100] = {0};
 	sprintf(send_it, "#%d=temp/%d/%d/%d/%d/%d/%d--ADC-uV=%d$\n\r",\

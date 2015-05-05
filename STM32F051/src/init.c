@@ -153,11 +153,11 @@ void init_Board_HMI(void)
 	EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;
 	EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Rising;  
 	EXTI_InitStructure.EXTI_LineCmd = ENABLE;
-	//EXTI_Init(&EXTI_InitStructure);
+	EXTI_Init(&EXTI_InitStructure);
 
 	/* =========== Init Encoder =========== */
 	/* Configure Encoder pins as input */	
-	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_3 | GPIO_Pin_4;
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_3;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;
 	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
 	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_DOWN;
@@ -167,15 +167,24 @@ void init_Board_HMI(void)
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_15;
 	GPIO_Init(GPIOA, &GPIO_InitStructure);
 	
+	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_DOWN;
+	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_4;
+	GPIO_Init(GPIOA, &GPIO_InitStructure);
+
 	/* Connect EXTI Lines to Encoder GPIO Pins */
 	SYSCFG_EXTILineConfig(EXTI_PortSourceGPIOB, EXTI_PinSource3);	//enc A output
 	SYSCFG_EXTILineConfig(EXTI_PortSourceGPIOB, EXTI_PinSource4);	//enc button
-	
-	/* Configure encoder EXTI lines */
-	EXTI_InitStructure.EXTI_Line = EXTI_Line3 | EXTI_Line4;
+
+	/* Configure encoder EXTI line */
+	EXTI_InitStructure.EXTI_Line = EXTI_Line3;
 	EXTI_InitStructure.EXTI_Mode = EXTI_Mode_Interrupt;
-	EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Rising;  
+	EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Falling;  
 	EXTI_InitStructure.EXTI_LineCmd = ENABLE;
+	EXTI_Init(&EXTI_InitStructure);
+
+	/* Configure encoder EXTI switch line */
+	EXTI_InitStructure.EXTI_Line = EXTI_Line4;
+	EXTI_InitStructure.EXTI_Trigger = EXTI_Trigger_Rising;  
 	EXTI_Init(&EXTI_InitStructure);
 
 	/* Enable and set Encoder EXTI Interrupt to the lowest priority */
@@ -183,7 +192,7 @@ void init_Board_HMI(void)
 	NVIC_InitStructure.NVIC_IRQChannelPriority = 0x03;
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
 	NVIC_Init(&NVIC_InitStructure); 
-	
+
 	/* Enable and set Buttons EXTI Interrupt to the lowest priority */
 	NVIC_InitStructure.NVIC_IRQChannel = EXTI4_15_IRQn;
 	NVIC_InitStructure.NVIC_IRQChannelPriority = 0x03;
@@ -379,21 +388,12 @@ void init_Triacs(void)
 	TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;
 	TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High;
 	
-	TIM_OCInitStructure.TIM_Pulse = 1000;
+	TIM_OCInitStructure.TIM_Pulse = 0;
 	TIM_OC1Init(TIM3, &TIM_OCInitStructure);
-
-	/* Output Compare Active Mode configuration: Channel2 */
-	TIM_OCInitStructure.TIM_Pulse = 1000;
 	TIM_OC2Init(TIM3, &TIM_OCInitStructure);
-	
-	/* Output Compare Active Mode configuration: Channel3 */
-	TIM_OCInitStructure.TIM_Pulse = 1000;
 	TIM_OC3Init(TIM3, &TIM_OCInitStructure);
-
-	/* Output Compare Active Mode configuration: Channel4 */
-	TIM_OCInitStructure.TIM_Pulse = 1000;
 	TIM_OC4Init(TIM3, &TIM_OCInitStructure);
 
 	/* TIM3 enable counter */
-	TIM_Cmd(TIM3, ENABLE);
+	TIM_Cmd(TIM3, DISABLE);
 }

@@ -98,7 +98,7 @@ void Define_I2C_Sessions(void)
 	i2c_sessions[0x05].rw = read;
 	i2c_sessions[0x05].param_count = 1;
 	i2c_sessions[0x05].byte_count = 4;
-	i2c_sessions[0x05].session_data = get_ADC_voltages;
+	i2c_sessions[0x05].session_data = get_ext_ADC_voltages;
 }
 
 
@@ -134,7 +134,7 @@ void get_tcn75_temp(uint8_t session_id, e_direction direction)
 	else
 		s_system.s_temp.thermocouple_board = (float)((((transfer_data_master[0] << 8) | transfer_data_master[1])>>4)*0.0625f);
 }
-void get_ADC_voltages(uint8_t session_id, e_direction direction)
+void get_ext_ADC_voltages(uint8_t session_id, e_direction direction)
 {
 	static uint16_t ADC_channel = 2;
 //	int attempts = 0;
@@ -159,7 +159,7 @@ void get_ADC_voltages(uint8_t session_id, e_direction direction)
 		s_system.s_temp.thermocouple[(transfer_data_master[3]>>5) & 0x03] = (ADC_read/20.48f)+s_system.s_temp.thermocouple_board;
 		
 //		if(ADC_channel++ < 3 && attempts++ < 10)
-//			i2c_send_session(session_get_ADC_voltages,ADC_EXT_ADDRESS);
+//			i2c_send_session(session_get_ext_ADC_voltages,ADC_EXT_ADDRESS);
 //		else
 //		{
 //			ADC_channel = 0;

@@ -16,7 +16,7 @@ typedef enum {
 	session_expander_set,
 	session_config_tcn75_temp,
 	session_get_tcn75_temp,
-	session_get_ADC_voltages
+	session_get_ext_ADC_voltages
 }e_i2c_session;
 
 extern struct i2c_sess {
@@ -55,5 +55,5 @@ void expander_config(uint8_t session_id, e_direction direction);
 void expander_set(uint8_t session_id, e_direction direction);
 void config_tcn75_temp(uint8_t session_id, e_direction direction);
 void get_tcn75_temp(uint8_t session_id, e_direction direction);
-void get_ADC_voltages(uint8_t session_id, e_direction direction);
+void get_ext_ADC_voltages(uint8_t session_id, e_direction direction);
 #endif /* __I2C_H */

@@ -17,19 +17,5 @@ typedef enum
 
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */
-void send_temps(void);
-
-
-
-typedef enum
-{
-  LM75_OK = 0,
-  LM75_FAIL
-}LM75_Status_TypDef;
-
-#define LM75_FLAG_TIMEOUT         ((uint32_t)0x1000)
-#define LM75_LONG_TIMEOUT         ((uint32_t)(10 * LM75_FLAG_TIMEOUT))    
-
-#define I2C_TIMEOUT         ((uint32_t)0x3FFFF) /*!< I2C Time out */
-#define I2C_ADDR		0x20<<1
+void uart_send_temps(void);
 #endif /* __COMUNICATION_H */
