@@ -94,17 +94,14 @@ void button_handler(e_buttons button)
 	/* ====== BUTTONS =========== */
 	if(button == button_1)
 	{
-
 		beep = true;
 	}
 	if(button == button_2)
 	{
-
 		beep = true;
 	}
 	if(button == button_3)
 	{
-
 		beep = true;
 	}
 	if(button == button_4)
@@ -142,20 +139,17 @@ void encoder_handler(void)
 /***************** DISPLAY  ****************/
 void write_to_display(uint16_t number)
 {
-	uint8_t display_out = 2;
+	uint8_t display_out = 3;
 	if(!display_block)
 	{
-		while(number)
+		display[0] = 0xff;
+		display[1] = 0xff;
+		display[2] = 0xff;
+		while(number && display_out)
 		{
-			display[display_out] = numbers[display_out][number % 10];
+			display[display_out-1] = numbers[display_out-1][number % 10];
 			display_out--;
 			number /= 10;
-			if(!number)
-			{
-				display[display_out] = 0xff;
-				//if(--display_out)
-					//display[display_out] = 0xff;
-			}
 		}
 		i2c_send_session(session_expander_set,GPIO_EXPANDER_0_ADDRESS);
 		i2c_send_session(session_expander_set,GPIO_EXPANDER_1_ADDRESS);
