@@ -145,6 +145,8 @@ void write_to_display(uint16_t number)
 		display[0] = 0xff;
 		display[1] = 0xff;
 		display[2] = 0xff;
+		if(!number)
+			display[2] = numbers[2][0];
 		while(number && display_out)
 		{
 			display[display_out-1] = numbers[display_out-1][number % 10];
