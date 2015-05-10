@@ -17,6 +17,7 @@
 #define AVG_SLOPE   (float)((TS_CAL1 - TS_CAL2)/80.0f) 
 	
 struct sys s_system;
+struct h_ramp ramp[10];
 
 volatile uint16_t ADC_Output[2];
 uint16_t temp[10] = {0};

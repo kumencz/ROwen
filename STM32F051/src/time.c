@@ -11,7 +11,7 @@
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 uint32_t real_time = 0;		//presnost = 0.1s
-
+bool up = true;
 uint8_t TIM_10MS_COUNTER;
 uint16_t TIM_100MS_COUNTER;
 uint16_t TIM_1000MS_COUNTER;
@@ -144,12 +144,24 @@ void tim_100ms_loop(void)
 	ADC_read();
 	i2c_send_session(session_get_tcn75_temp,TEMP_TCN75A_ADDRESS); //get temp from TCN75A
 	write_to_display(s_system.s_temp.thermocouple[2]);
+	
+//	if(up)
+//	{
+//		if(++s_system.s_temp.thermocouple[2] > 300 )
+//			up = false;
+//	}
+//	else
+//	{
+//		if(--s_system.s_temp.thermocouple[2] < 25 )
+//			up = true;
+//	}
 }
 
 void tim_1000ms_loop(void)
 {
 //	triac_set_duty(1,test_counter);
 //	triac_set_duty(2,100-test_counter);
+
 	uart_send_temps();
 	
 	/* running LED blink */

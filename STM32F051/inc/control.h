@@ -17,6 +17,12 @@ extern struct sys
 	}s_power;
 }s_system;
 
+extern struct h_ramp
+{
+	unsigned int duration;
+	unsigned int final_temp;
+}ramp[10];
+
 extern volatile uint16_t ADC_Output[2];
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */

@@ -264,15 +264,16 @@ void USART1_IRQHandler(void)
 		static uint8_t mess_lenght = 0; //string length
 		char t = USART1->RDR; // receive character
 		
-		if( (t != 'n') && (mess_lenght < MAX_MESSAGE_LENGHT) ){
+		if( (t != '$') && (mess_lenght < MAX_MESSAGE_LENGHT) ){
 			received_string[mess_lenght] = t;
 			mess_lenght++;
 		}
 		else
 		{
+			received_string[mess_lenght] = '\0';
 			mess_lenght = 0;
-			uart_parse((uint8_t*)received_string);
-			//USART_puts(USART1, received_string);
+			uart_parse((char*)received_string);
+			USART_puts(USART1, received_string);
 		}
 	}
 	if(USART_GetITStatus(USART1, USART_IT_TXE) != RESET)

@@ -376,8 +376,8 @@ void init_Triacs(void)
 	TIM_OCStructInit(&TIM_OCInitStructure);
 
 	/* Time base configuration */
-	TIM_TimeBaseStructure.TIM_Period = 100-1;
-	TIM_TimeBaseStructure.TIM_Prescaler = (uint16_t) (SystemCoreClock / 100) - 1;
+	TIM_TimeBaseStructure.TIM_Period = 1000-1;
+	TIM_TimeBaseStructure.TIM_Prescaler = (uint16_t) (SystemCoreClock / 1000) - 1;
 	TIM_TimeBaseStructure.TIM_ClockDivision = 0;
 	TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
 
