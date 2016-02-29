@@ -143,7 +143,7 @@ void tim_100ms_loop(void)
 	i2c_send_session(session_get_ext_ADC_voltages,ADC_EXT_ADDRESS);
 	ADC_read();
 	i2c_send_session(session_get_tcn75_temp,TEMP_TCN75A_ADDRESS); //get temp from TCN75A
-	write_to_display(s_system.s_temp.thermocouple[2]);
+	number_to_display(s_system.s_temp.thermocouple[2], 0);
 	
 //	if(up)
 //	{

@@ -37,7 +37,8 @@ void buzzer_speed(uint16_t speed);
 void buzzer(e_buzzer_mode b_mode, uint8_t beep_count);
 void button_handler(e_buttons button);
 void encoder_handler(void);
-void write_to_display(uint16_t number);
+void write_to_display(uint8_t byte, uint8_t display_id);
+void number_to_display(float number_in, uint8_t dot_pos);
 #endif /* __HMI_H */
 
 

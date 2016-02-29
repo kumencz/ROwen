@@ -41,19 +41,19 @@ void triac_modify_duty(e_triacs triac, int16_t count)
 			TIM3->CCR3 += count;
 			if(TIM3->CCR3 > 65000) TIM3->CCR3 = 0;
 			if(TIM3->CCR3 > 1000) TIM3->CCR3 = 1000;
-			write_to_display(TIM3->CCR3/10);
+			number_to_display(TIM3->CCR3/10,0);
 		break;
 		case bottom_heat:
 			TIM3->CCR4 += count;
 			if(TIM3->CCR4 > 65000) TIM3->CCR4 = 0;
 			if(TIM3->CCR4 > 1000) TIM3->CCR4 = 1000;
-			write_to_display(TIM3->CCR4/10);
+			number_to_display(TIM3->CCR4/10,0);
 		break;
 		case light:
-			write_to_display(TIM3->CCR1/10);
+			number_to_display(TIM3->CCR1/10,0);
 		break;
 		case fan:
-			write_to_display(TIM3->CCR2/10);
+			number_to_display(TIM3->CCR2/10,0);
 		break;
 	}
 	

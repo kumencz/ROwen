@@ -40,7 +40,6 @@ const uint8_t numbers[3][10] = {
 	{0x11,0x7d,0x23,0x29,0x4D,0x89,0x81,0x3D,0x01,0x09}
 };
 
-
 const struct s_encoder{
 	GPIO_TypeDef * port_A;
 	GPIO_TypeDef * port_B;
@@ -170,7 +169,6 @@ void encoder_cw(void)
 		buzzer_speed(3);
 	}
 }
-
 void encoder_ccw(void)
 {
 	if(TIM3->CR1 & TIM_CR1_CEN)
@@ -186,26 +184,57 @@ void encoder_ccw(void)
 	}
 }
 
-
-
 /***************** DISPLAY  ****************/
-void write_to_display(uint16_t number)
+void write_buffer_to_display(void)
 {
-	uint8_t display_out = 3;
+	i2c_send_session(session_expander_set,GPIO_EXPANDER_0_ADDRESS);
+	i2c_send_session(session_expander_set,GPIO_EXPANDER_1_ADDRESS);
+}
+void write_to_display(uint8_t byte, uint8_t display_id)
+{
+	display[display_id] = byte;
+	write_buffer_to_display();
+}
+void number_to_display(float number_in, uint8_t dot_pos)
+{
+	/* Show precision, as "dot_pos", not implemented yet!!! */
 	if(!display_block)
 	{
-		display[0] = 0xff;
-		display[1] = 0xff;
-		display[2] = 0xff;
-		if(!number)
-			display[2] = numbers[2][0];
-		while(number && display_out)
+		if(number_in >= 1000)
+			number_in = 999;
+		uint32_t number = number_in * 100;
+		uint8_t count = 0;
+		uint8_t disp_buff[5];
+		display[0] = 0xFF;
+		display[1] = 0xFF;
+		display[2] = 0xFF;
+
+		while(number)
 		{
-			display[display_out-1] = numbers[display_out-1][number % 10];
-			display_out--;
+			disp_buff[count] = (uint16_t) number % 10;
 			number /= 10;
+			count++;
 		}
-		i2c_send_session(session_expander_set,GPIO_EXPANDER_0_ADDRESS);
-		i2c_send_session(session_expander_set,GPIO_EXPANDER_1_ADDRESS);
+
+		if(count == 1 || count == 2 || count == 3 || dot_pos == 1)
+			display[0] = ~segments[0][7];
+		else if(count == 4 || dot_pos == 2)
+			display[1] = ~segments[1][7];
+
+		while(count < 3)
+		{
+			disp_buff[count] = 0;
+			count++;
+		}
+		if(!number_in)
+		{
+			display[2] = numbers[0][0];
+		}else
+		{
+			display[0] &= numbers[0][disp_buff[count-1]];
+			display[1] &= numbers[1][disp_buff[count-2]];
+			display[2] &= numbers[2][disp_buff[count-3]];
+		}
+		write_buffer_to_display();
 	}
 }
