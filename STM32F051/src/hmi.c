@@ -9,6 +9,7 @@
 /* Private function prototypes -----------------------------------------------*/
 void encoder_cw(void);
 void encoder_ccw(void);
+void write_buffer_to_display(void);
 /* Private functions ---------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
@@ -20,7 +21,7 @@ uint16_t buzzer_beep_time_counter = 0;
 uint16_t buzzer_beep_time = 0;
 e_buzzer_mode buzzer_mode = off;
 
-uint8_t display[4] = {1};
+uint8_t display[4] = {0xFF,0xFF,0xFF,0xFF};
 /*         ______
           /  6  /
          /7   5/
@@ -184,12 +185,12 @@ void encoder_ccw(void)
 	}
 }
 
-/***************** DISPLAY  ****************/
 void write_buffer_to_display(void)
 {
 	i2c_send_session(session_expander_set,GPIO_EXPANDER_0_ADDRESS);
 	i2c_send_session(session_expander_set,GPIO_EXPANDER_1_ADDRESS);
 }
+/***************** DISPLAY  ****************/
 void write_to_display(uint8_t byte, uint8_t display_id)
 {
 	display[display_id] = byte;
@@ -237,4 +238,18 @@ void number_to_display(float number_in, uint8_t dot_pos)
 		}
 		write_buffer_to_display();
 	}
+}
+/***************** TOP LEDS  ****************/
+void set_i2c_led(uint8_t led_id, bool state)
+{
+	static const uint8_t led_matrix[7] = {6,5,4,3,2,1,0};
+	if(state)
+	{
+		display[3] &= ~(1<<led_matrix[led_id]);
+		
+	}else
+	{
+		display[3] |= (1<<led_matrix[led_id]);
+	}
+	write_buffer_to_display();
 }
