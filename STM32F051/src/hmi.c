@@ -94,13 +94,18 @@ void button_handler(e_buttons button)
 		TIM3->CR1 ^= TIM_CR1_CEN;
 		if(TIM3->CR1 & TIM_CR1_CEN)
 		{
-			GPIOB->BRR = GPIO_Pin_6;
+			/*Turn lights on */
+			GPIOB->BRR = GPIO_Pin_7;
+			triac_set_duty(triac_3,100);
+			triac_set_duty(triac_4,100);
+			TIM3->CCR3 = 0;
+			TIM3->CCR4 = 0;
 			
 			buzzer(beeps,2);
 			buzzer_speed(80);
 		}else
 		{
-			GPIOB->BSRR = GPIO_Pin_6;
+			GPIOB->BSRR = GPIO_Pin_7;
 			
 			TIM3->CCR1 = 0;
 			TIM3->CCR2 = 0;
@@ -115,6 +120,13 @@ void button_handler(e_buttons button)
 	/* ====== BUTTONS =========== */
 	if(button == button_1)
 	{
+		if(triac_get_duty(triac_3) != 0)
+		{
+			triac_set_duty(triac_3,0);
+		}else
+		{
+			triac_set_duty(triac_3,100);
+		}
 		beep = true;
 	}
 	if(button == button_2)
@@ -162,9 +174,10 @@ void encoder_cw(void)
 	{
 		display_block = 0;
 		
-		triac_modify_duty(top_heat,100);
-		triac_modify_duty(bottom_heat,100);
-		
+		triac_modify_duty(triac_1,10);
+		triac_modify_duty(triac_2,10);
+		number_to_display(triac_get_duty(triac_1),0);
+
 		display_block = 3000;
 		buzzer(beeps,1);
 		buzzer_speed(3);
@@ -176,9 +189,10 @@ void encoder_ccw(void)
 	{
 		display_block = 0;
 		
-		triac_modify_duty(top_heat,-100);
-		triac_modify_duty(bottom_heat,-100);
-		
+		triac_modify_duty(triac_1,-10);
+		triac_modify_duty(triac_2,-10);
+		number_to_display(triac_get_duty(triac_1),0);
+
 		display_block = 3000;
 		buzzer(beeps,1);
 		buzzer_speed(3);
@@ -252,4 +266,15 @@ void set_i2c_led(uint8_t led_id, bool state)
 		display[3] |= (1<<led_matrix[led_id]);
 	}
 	write_buffer_to_display();
+}
+void led_bargraph_set(uint8_t number)
+{
+	for(int i = 0; i < number; i++)
+	{
+		set_i2c_led(i, ENABLE);
+	}
+	for(int i = number; i < 7; i++)
+	{
+		set_i2c_led(i, DISABLE);
+	}
 }

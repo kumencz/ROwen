@@ -40,6 +40,7 @@ void encoder_handler(void);
 void write_to_display(uint8_t byte, uint8_t display_id);
 void number_to_display(float number_in, uint8_t dot_pos);
 void set_i2c_led(uint8_t led_id, bool state);
+void led_bargraph_set(uint8_t number);
 #endif /* __HMI_H */
 
 

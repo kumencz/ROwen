@@ -165,7 +165,7 @@ void tim_1000ms_loop(void)
 	uart_send_temps();
 	
 	/* running LED blink */
-	GPIOB->ODR ^= GPIO_Pin_7;
+	GPIOB->ODR ^= GPIO_Pin_6;
 	/* SPEED meter */
 	speed = speed_counter;
 	speed_counter = 0;
