@@ -97,7 +97,7 @@ void Define_I2C_Sessions(void)
 	// get ADC
 	i2c_sessions[0x05].rw = read;
 	i2c_sessions[0x05].param_count = 1;
-	i2c_sessions[0x05].byte_count = 4;
+	i2c_sessions[0x05].byte_count = 3;
 	i2c_sessions[0x05].session_data = get_ext_ADC_voltages;
 }
 
@@ -142,22 +142,34 @@ void get_ext_ADC_voltages(uint8_t session_id, e_direction direction)
 
 	if(direction == transmit)
 	{
-		parameters_master[0] = (0x1<<7)|(ADC_channel<<5)|0x1F;
+		parameters_master[0] = (0x1<<7)|(ADC_channel<<5)|0x1B;
 	}else
 	{
-		if((transfer_data_master[3]>>7 & 0x01) != 1)	// check RDY flag
+		if((transfer_data_master[2]>>7 & 0x01) != 1)	// check RDY flag
 		{
-			/*
-				ADC_read*1.953125f => napeti v uV
-				K thermocouple -> 40uV/stupenC
-				ADC_read/20.48 = stupne C
-			*/
-			ADC_read = (int32_t)(((uint32_t)transfer_data_master[0]<<24) |\
-						((uint32_t)transfer_data_master[1]<<16) |\
-						((uint32_t)transfer_data_master[2]<<8))/256;
 
-			s_system.s_power.ADC_uvolt[(transfer_data_master[3]>>5) & 0x03] = (int32_t)(ADC_read*1.953125f);							// measure volatage on thermoclouple [uV]
-			s_system.s_temp.thermocouple[(transfer_data_master[3]>>5) & 0x03] = (ADC_read/20.48f)+s_system.s_temp.thermocouple_board;	// convert thermocouple voltage to temperature [degree C]
+			/*	18-bit + 8*PGA - 3.75 SPS
+				---------------
+				LSB = 1.953125 uV
+				ADC_read*1.953125 => napeti [uV]
+				K thermocouple -> 40uV/stupenC
+				ADC_read*(1.953125/40) = stupne C
+				ADC_read*0.048828125 = stupne C
+				*/
+
+			/*	16-bit + 8*PGA - 15 SPS
+				--------------
+				LSB = 7.81257 uV
+				ADC_read*7.81257 => napeti [uV]
+				K thermocouple -> 40uV/stupenC
+				ADC_read*(7.81257/40) = [stupne C]
+				ADC_read*0.1953125 = [stupne C]
+				*/
+
+			ADC_read = (int16_t)(((uint16_t)transfer_data_master[0]<<8) | (uint32_t)(transfer_data_master[1]));
+
+			s_system.s_power.ADC_uvolt[(transfer_data_master[2]>>5) & 0x03] = (int32_t)(ADC_read*7.8125f);									// measure volatage on thermoclouple [uV]
+			s_system.s_temp.thermocouple[(transfer_data_master[2]>>5) & 0x03] = (ADC_read*0.1953125f)+s_system.s_temp.thermocouple_board;	// convert thermocouple voltage to temperature [degree C]
 
 			if(++ADC_channel <= 3)
 				i2c_send_session(session_get_ext_ADC_voltages,ADC_EXT_ADDRESS); // measure next channel
@@ -170,6 +182,8 @@ void get_ext_ADC_voltages(uint8_t session_id, e_direction direction)
 		{
 			if(++attempts < 10)
 				i2c_send_session(session_get_ext_ADC_voltages,ADC_EXT_ADDRESS);
+			else
+				attempts = 0;
 		}
 	}
 }

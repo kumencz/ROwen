@@ -131,10 +131,12 @@ void tim_1ms_loop(void)
 	}
 	if(display_block != 0)
 		display_block--;
+
+	i2c_process_session();
 }
 void tim_10ms_loop(void)
 {
-	i2c_process_session();
+
 }
 
 void tim_100ms_loop(void)
@@ -144,7 +146,6 @@ void tim_100ms_loop(void)
 	ADC_read();
 	i2c_send_session(session_get_tcn75_temp,TEMP_TCN75A_ADDRESS); //get temp from TCN75A
 	number_to_display(s_system.s_temp.thermocouple[2], 0);
-	
 //	if(up)
 //	{
 //		if(++s_system.s_temp.thermocouple[2] > 300 )
