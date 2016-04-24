@@ -27,7 +27,6 @@ extern uint16_t buttons_delay[5];
 extern uint16_t display_block;
 
 extern uint8_t display[4];
-extern const uint8_t charset[4][255];
 /* Exported macro ------------------------------------------------------------*/
 #define button_press_delay			500
 
@@ -39,6 +38,7 @@ void button_handler(e_buttons button);
 void encoder_handler(void);
 void write_to_display(uint8_t byte, uint8_t display_id);
 void number_to_display(float number_in, uint8_t dot_pos);
+void text_to_display(char text[3]);
 void set_i2c_led(uint8_t led_id, bool state);
 void led_bargraph_set(uint8_t number);
 #endif /* __HMI_H */
