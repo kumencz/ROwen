@@ -145,7 +145,8 @@ void tim_100ms_loop(void)
 	i2c_send_session(session_get_ext_ADC_voltages,ADC_EXT_ADDRESS);
 	ADC_read();
 	i2c_send_session(session_get_tcn75_temp,TEMP_TCN75A_ADDRESS); //get temp from TCN75A
-	number_to_display(s_system.s_temp.thermocouple[2], 0);
+	if(mode_current == 3 || mode_current == 9)
+		number_to_display(s_system.s_temp.thermocouple[2], 0);
 //	if(up)
 //	{
 //		if(++s_system.s_temp.thermocouple[2] > 300 )
@@ -156,6 +157,8 @@ void tim_100ms_loop(void)
 //		if(--s_system.s_temp.thermocouple[2] < 25 )
 //			up = true;
 //	}
+	/* running LED blink */
+	GPIOB->ODR ^= GPIO_Pin_6;
 }
 
 void tim_1000ms_loop(void)
@@ -164,9 +167,6 @@ void tim_1000ms_loop(void)
 //	triac_set_duty(2,100-test_counter);
 
 	uart_send_temps();
-	
-	/* running LED blink */
-	GPIOB->ODR ^= GPIO_Pin_6;
 	/* SPEED meter */
 	speed = speed_counter;
 	speed_counter = 0;

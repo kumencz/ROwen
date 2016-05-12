@@ -40,11 +40,11 @@ const uint8_t numbers[3][10] = {
 	{0x88,0xEB,0x4C,0x49,0x2B,0x19,0x18,0xCB,0x08,0x09},
 	{0x11,0x7d,0x23,0x29,0x4D,0x89,0x81,0x3D,0x01,0x09}
 };
-const uint8_t letters[3][27] = {
-/*   A,   b,   C,   d,   E,   F,   g,   H,   I,   J,   K,   L,   M,   n,   O,   P,   q,   r,   S,   t,   U,   v,   w,   x,   y,   Z,   space */
-	{0x50,0x1C,0x39,0x16,0x38,0x78,0x90,0x54,0x7D,0x17,0x44,0x3D,0x5B,0x5E,0x11,0x70,0xD0,0x7E,0x98,0x3C,0x15,0x1F,0x00,0x00,0x94,0x32,0xFF},
-	{0x0A,0x38,0x9C,0x68,0x1C,0x1E,0x09,0x2A,0xBE,0xE8,0x22,0xBC,0xDA,0x7A,0x88,0x0E,0x0B,0x7E,0x19,0x3C,0xA8,0xF8,0x00,0x00,0x29,0x4C,0xFF},
-	{0x05,0xC1,0x93,0x61,0x83,0x87,0x09,0x45,0xD7,0x71,0x44,0xD3,0xB5,0xE5,0x11,0x07,0x0D,0xE7,0x89,0xC3,0x51,0xF1,0x00,0x00,0x49,0x23,0xFF}
+const uint8_t letters[3][26] = {
+/*   A,   b,   C,   d,   E,   F,   g,   H,   I,   J,   K,   L,   M,   n,   O,   P,   q,   r,   S,   t,   U,   v,   w,   x,   y,   Z*/
+	{0x50,0x1C,0x39,0x16,0x38,0x78,0x90,0x54,0x7D,0x17,0x44,0x3D,0x5B,0x5E,0x11,0x70,0xD0,0x7E,0x98,0x3C,0x15,0x1F,0x00,0x00,0x94,0x32},
+	{0x0A,0x38,0x9C,0x68,0x1C,0x1E,0x09,0x2A,0xBE,0xE8,0x22,0xBC,0xDA,0x7A,0x88,0x0E,0x0B,0x7E,0x19,0x3C,0xA8,0xF8,0x00,0x00,0x29,0x4C},
+	{0x05,0xC1,0x93,0x61,0x83,0x87,0x09,0x45,0xD7,0x71,0x44,0xD3,0xB5,0xE5,0x11,0x07,0x0D,0xE7,0x89,0xC3,0x51,0xF1,0x00,0x00,0x49,0x23}
 	};
 const struct s_encoder{
 	GPIO_TypeDef * port_A;
@@ -60,9 +60,6 @@ const struct s_encoder{
 
 int8_t enc_count = 0;
 uint8_t enc_val = 0;
-
-
-
 
 void buzzer(e_buzzer_mode b_mode, uint8_t beep_count)
 {
@@ -96,31 +93,37 @@ void button_handler(e_buttons button)
 	/* ====== ENCODER button =========== */
 	if(button == button_enc && !buttons_delay[button_enc])
 	{
-		TIM3->CR1 ^= TIM_CR1_CEN;
-		if(TIM3->CR1 & TIM_CR1_CEN)
+		if(mode_current == 10)
 		{
-			/*Turn lights on */
-			GPIOB->BRR = GPIO_Pin_7;
-			triac_set_duty(triac_3,100);
-			triac_set_duty(triac_4,100);
-			TIM3->CCR3 = 0;
-			TIM3->CCR4 = 0;
-			
-			buzzer(beeps,2);
-			buzzer_speed(80);
+			TIM3->CR1 ^= TIM_CR1_CEN;
+			if(TIM3->CR1 & TIM_CR1_CEN)
+			{
+				/*Turn lights on */
+				GPIOB->BRR = GPIO_Pin_7;
+				triac_set_duty(triac_3,100);
+				triac_set_duty(triac_4,100);
+				TIM3->CCR3 = 0;
+				TIM3->CCR4 = 0;
+				
+				buzzer(beeps,2);
+				buzzer_speed(80);
+			}else
+			{
+				GPIOB->BSRR = GPIO_Pin_7;
+				
+				TIM3->CCR1 = 0;
+				TIM3->CCR2 = 0;
+				TIM3->CCR3 = 0;
+				TIM3->CCR4 = 0;
+				
+				buzzer(beeps,3);
+				buzzer_speed(80);
+			}
+			beep = false;
 		}else
 		{
-			GPIOB->BSRR = GPIO_Pin_7;
-			
-			TIM3->CCR1 = 0;
-			TIM3->CCR2 = 0;
-			TIM3->CCR3 = 0;
-			TIM3->CCR4 = 0;
-			
-			buzzer(beeps,3);
-			buzzer_speed(80);
+			beep = true;
 		}
-		beep = false;
 	}
 	/* ====== BUTTONS =========== */
 	if(button == button_1)
@@ -136,6 +139,9 @@ void button_handler(e_buttons button)
 	}
 	if(button == button_2)
 	{
+		mode_selector(quit_action);
+		buzzer(beeps,2);
+		buzzer_speed(50);
 		beep = true;
 	}
 	if(button == button_3)
@@ -144,12 +150,14 @@ void button_handler(e_buttons button)
 	}
 	if(button == button_4)
 	{
-		
-		beep = true;
+		mode_selector(enter_action);
+		buzzer(beeps,2);
+		buzzer_speed(50);
+		beep = false;
 	}
 	if(beep)
 	{
-  		buzzer(beeps,1);
+		buzzer(beeps,1);
 		buzzer_speed(30);
 	}
 	buttons_delay[button] = button_press_delay;
@@ -175,7 +183,10 @@ void encoder_handler(void)
 }
 void encoder_cw(void)
 {
-	if(TIM3->CR1 & TIM_CR1_CEN)
+	if(mode_showed != 0)
+	{
+		mode_selector(next_action);
+	}else if(TIM3->CR1 & TIM_CR1_CEN)
 	{
 		display_block = 0;
 		
@@ -190,7 +201,10 @@ void encoder_cw(void)
 }
 void encoder_ccw(void)
 {
-	if(TIM3->CR1 & TIM_CR1_CEN)
+	if(mode_showed != 0)
+	{
+		mode_selector(previous_action);
+	}else if(TIM3->CR1 & TIM_CR1_CEN)
 	{
 		display_block = 0;
 		
@@ -276,6 +290,12 @@ void text_to_display(char text[3])
 		else if(text[i] >= 97 && text[i] <= 122)
 		{
 			display[i] = letters[i][text[i]-97];
+		}else if(text[i] == ' ')
+		{
+			display[i] = 0xFF;
+		}else if(text[i] == '-')
+		{
+			display[i] = ~segments[i][3];
 		}else
 		{
 			display[i] = 0xFF;

@@ -32,6 +32,8 @@ void initialization(void)
 	init_USART();
 	init_Triacs();
 //	init_Flash();
+
+	mode_selector(next_action);
 }
 void init_SysTick(void)
 {
