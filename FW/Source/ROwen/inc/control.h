@@ -42,11 +42,13 @@ extern uint8_t mode_showed;
 extern uint8_t mode_current;
 extern float P_term, I_term, D_term;
 extern volatile uint16_t ADC_Output[2];
+extern uint16_t set_temp_mem;
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */
 void ADC_read(void);
 void mode_selector(e_action action);
 uint8_t mode_get_child(uint8_t parrent_id, uint8_t start_id, bool upcount);
 uint16_t ramp_get_temp(struct h_curr_ramp *ramp);
+void PID_update_temp(uint16_t temp);
 int16_t PID_controller(uint16_t setPoint, uint16_t feedback);
 #endif /* __CONTROL_H */

@@ -99,6 +99,7 @@ void button_handler(e_buttons button)
 	/* ====== BUTTONS =========== */
 	if(button == button_1)
 	{
+		/* Light */
 		if(triac_get_duty(triac_3) != 0)
 		{
 			triac_set_duty(triac_3,0);
@@ -184,6 +185,15 @@ void encoder_cw(void)
 	if(mode_showed != 0)
 	{
 		mode_selector(next_action);
+	}else if(mode_current == 14)
+	{
+		display_block = 0;
+
+		set_temp_mem += 5;
+		PID_update_temp(set_temp_mem);
+		number_to_display(set_temp_mem,0);
+
+		display_block = 3000;
 	}else if(mode_current == 16)
 	{
 		display_block = 0;
@@ -210,6 +220,18 @@ void encoder_ccw(void)
 	if(mode_showed != 0)
 	{
 		mode_selector(previous_action);
+	}else if(mode_current == 14)
+	{
+		display_block = 0;
+
+		if(set_temp_mem > 5)
+		{
+			set_temp_mem -= 5;
+		}
+		PID_update_temp(set_temp_mem);
+		number_to_display(set_temp_mem,0);
+
+		display_block = 3000;
 	}else if(mode_current == 16)
 	{
 		display_block = 0;

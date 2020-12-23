@@ -158,7 +158,7 @@ void tim_100ms_loop(void)
 	i2c_send_session(session_get_ext_ADC_voltages,ADC_EXT_ADDRESS);
 	ADC_read();
 	i2c_send_session(session_get_tcn75_temp,TEMP_TCN75A_ADDRESS); //get temp from TCN75A
-	if(mode_current == 3 || mode_current == 9 || mode_current == 16 || curr_ramp.running)
+	if(mode_current == 3 || mode_current == 9 || mode_current == 14 || mode_current == 15 || mode_current == 16 || curr_ramp.running)
 		number_to_display((s_system.s_temp.thermocouple[2] > s_system.s_temp.thermocouple[3]) ? s_system.s_temp.thermocouple[3] : s_system.s_temp.thermocouple[2], 0);
 //	if(up)
 //	{
@@ -178,21 +178,10 @@ void tim_1000ms_loop(void)
 {
 	if(curr_ramp.running)
 	{
-		int8_t duty = PID_controller(ramp_get_temp(&curr_ramp), s_system.s_temp.reflow_temp);
-		if(duty >= 0)
-		{
-			triac_set_duty(triac_1,duty);
-			triac_set_duty(triac_2,duty);
-			triac_set_duty(triac_4,0);
-			led_bargraph_set(((6*duty)/100));
-		}else if(duty < 0)
-		{
-			triac_set_duty(triac_1,0);
-			triac_set_duty(triac_2,0);
-			triac_set_duty(triac_4,-duty);
-			led_bargraph_set(((6*(-duty))/100));
-			set_i2c_led(6,true);
-		}
+		PID_update_temp(ramp_get_temp(&curr_ramp));
+	}else if(set_temp_mem > 0)
+	{
+		PID_update_temp(set_temp_mem);
 	}
 	uart_send_temps();
 	/* SPEED meter */
