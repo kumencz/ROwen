@@ -91,39 +91,10 @@ void button_handler(e_buttons button)
 	bool beep = false;
 	
 	/* ====== ENCODER button =========== */
-	if(button == button_enc && !buttons_delay[button_enc])
+	if(button == button_enc)
 	{
-		if(mode_current == 10)
-		{
-			TIM3->CR1 ^= TIM_CR1_CEN;
-			if(TIM3->CR1 & TIM_CR1_CEN)
-			{
-				/*Turn lights on */
-				GPIOB->BRR = GPIO_Pin_7;
-				triac_set_duty(triac_3,100);
-				triac_set_duty(triac_4,100);
-				TIM3->CCR3 = 0;
-				TIM3->CCR4 = 0;
-				
-				buzzer(beeps,2);
-				buzzer_speed(80);
-			}else
-			{
-				GPIOB->BSRR = GPIO_Pin_7;
-				
-				TIM3->CCR1 = 0;
-				TIM3->CCR2 = 0;
-				TIM3->CCR3 = 0;
-				TIM3->CCR4 = 0;
-				
-				buzzer(beeps,3);
-				buzzer_speed(80);
-			}
-			beep = false;
-		}else
-		{
-			beep = true;
-		}
+		mode_selector(enter_action);
+		beep = true;
 	}
 	/* ====== BUTTONS =========== */
 	if(button == button_1)
@@ -139,28 +110,55 @@ void button_handler(e_buttons button)
 	}
 	if(button == button_2)
 	{
-		mode_selector(quit_action);
-		buzzer(beeps,2);
-		buzzer_speed(50);
 		beep = true;
 	}
 	if(button == button_3)
 	{
+		mode_selector(quit_action);
+		buzzer(beeps,2);
+		buzzer_speed(50);
 		beep = true;
+		
 	}
 	if(button == button_4)
 	{
-		mode_selector(enter_action);
-		buzzer(beeps,2);
-		buzzer_speed(50);
-		beep = false;
+		if(mode_current == 10)
+		{
+			TIM3->CR1 ^= TIM_CR1_CEN;
+			if(TIM3->CR1 & TIM_CR1_CEN)
+			{
+				/*Turn lights on */
+				GPIOB->BRR = GPIO_Pin_7;
+				triac_set_duty(triac_3,100);
+				triac_set_duty(triac_1,0);
+				triac_set_duty(triac_2,0);
+				triac_set_duty(triac_4,0);
+
+				buzzer(beeps,2);
+				buzzer_speed(80);
+			}else
+			{
+				GPIOB->BSRR = GPIO_Pin_7;
+				triac_set_duty(triac_1,0);
+				triac_set_duty(triac_2,0);
+				triac_set_duty(triac_3,0);
+				triac_set_duty(triac_4,0);
+
+				buzzer(beeps,3);
+				buzzer_speed(80);
+			}
+			beep = false;
+		}else
+		{
+			beep = true;
+		}
 	}
 	if(beep)
 	{
 		buzzer(beeps,1);
 		buzzer_speed(30);
 	}
-	buttons_delay[button] = button_press_delay;
+	buttons_delay[button] = button_press_delay;		// set min delay between button presses
 }
 
 void encoder_handler(void)
@@ -186,7 +184,15 @@ void encoder_cw(void)
 	if(mode_showed != 0)
 	{
 		mode_selector(next_action);
-	}else if(TIM3->CR1 & TIM_CR1_CEN)
+	}else if(mode_current == 16)
+	{
+		display_block = 0;
+		
+		triac_modify_duty(triac_4,10);
+		number_to_display(triac_get_duty(triac_4),0);
+
+		display_block = 3000;
+	}else if(mode_current == 2)
 	{
 		display_block = 0;
 		
@@ -195,16 +201,24 @@ void encoder_cw(void)
 		number_to_display(triac_get_duty(triac_1),0);
 
 		display_block = 3000;
-		buzzer(beeps,1);
-		buzzer_speed(3);
 	}
+	buzzer(beeps,1);
+	buzzer_speed(3);
 }
 void encoder_ccw(void)
 {
 	if(mode_showed != 0)
 	{
 		mode_selector(previous_action);
-	}else if(TIM3->CR1 & TIM_CR1_CEN)
+	}else if(mode_current == 16)
+	{
+		display_block = 0;
+		
+		triac_modify_duty(triac_4,-10);
+		number_to_display(triac_get_duty(triac_4),0);
+
+		display_block = 3000;
+	}else if(mode_current == 2)
 	{
 		display_block = 0;
 		
@@ -213,17 +227,18 @@ void encoder_ccw(void)
 		number_to_display(triac_get_duty(triac_1),0);
 
 		display_block = 3000;
-		buzzer(beeps,1);
-		buzzer_speed(3);
 	}
+	buzzer(beeps,1);
+	buzzer_speed(1);
 }
 
+
+/***************** DISPLAY  ****************/
 void write_buffer_to_display(void)
 {
 	i2c_send_session(session_expander_set,GPIO_EXPANDER_0_ADDRESS);
 	i2c_send_session(session_expander_set,GPIO_EXPANDER_1_ADDRESS);
 }
-/***************** DISPLAY  ****************/
 void write_to_display(uint8_t byte, uint8_t display_id)
 {
 	display[display_id] = byte;

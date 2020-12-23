@@ -28,7 +28,7 @@ extern uint16_t display_block;
 
 extern uint8_t display[4];
 /* Exported macro ------------------------------------------------------------*/
-#define button_press_delay			500
+#define button_press_delay			300
 
 
 /* Exported functions ------------------------------------------------------- */

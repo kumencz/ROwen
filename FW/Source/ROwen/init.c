@@ -390,7 +390,7 @@ void init_Triacs(void)
 
 	/* Time base configuration */
 	TIM_TimeBaseStructure.TIM_Period = 1000-1;
-	TIM_TimeBaseStructure.TIM_Prescaler = (uint16_t) (SystemCoreClock / 1000) - 1;
+	TIM_TimeBaseStructure.TIM_Prescaler = (uint16_t) (SystemCoreClock / 10000) - 1;
 	TIM_TimeBaseStructure.TIM_ClockDivision = 0;
 	TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
 	TIM_TimeBaseInit(TIM3, &TIM_TimeBaseStructure);
@@ -407,5 +407,5 @@ void init_Triacs(void)
 	TIM_OC4Init(TIM3, &TIM_OCInitStructure);
 
 	/* TIM3 enable counter */
-	TIM_Cmd(TIM3, DISABLE);
+	TIM_Cmd(TIM3, ENABLE);
 }

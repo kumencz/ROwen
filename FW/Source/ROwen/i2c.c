@@ -62,7 +62,7 @@ void Define_I2C_Sessions(void)
 {
 	
 	// PREDELAT na KONSTANTU !!!!!!!!
-	for(int i = 0; i < 64;i++)
+	for(int i = 0; i < 30;i++)
 	{
 		i2c_sessions[i].rw = write;
 		i2c_sessions[i].param_count = 0;
@@ -75,25 +75,25 @@ void Define_I2C_Sessions(void)
 	i2c_sessions[0x01].param_count = 3;
 	i2c_sessions[0x01].byte_count = 0;
 	i2c_sessions[0x01].session_data = expander_config;
-
+	
 	// set i2c expander port 0
 	i2c_sessions[0x02].rw = write;
 	i2c_sessions[0x02].param_count = 3;
 	i2c_sessions[0x02].byte_count = 0;
 	i2c_sessions[0x02].session_data = expander_set;
-
+	
 	// config tcn75
 	i2c_sessions[0x03].rw = write;
 	i2c_sessions[0x03].param_count = 2;
 	i2c_sessions[0x03].byte_count = 0;
 	i2c_sessions[0x03].session_data = config_tcn75_temp;
-
+	
 	// get temp from tcn75
 	i2c_sessions[0x04].rw = read;
 	i2c_sessions[0x04].param_count = 1;
 	i2c_sessions[0x04].byte_count = 2;
 	i2c_sessions[0x04].session_data = get_tcn75_temp;
-
+	
 	// get ADC
 	i2c_sessions[0x05].rw = read;
 	i2c_sessions[0x05].param_count = 1;
@@ -134,6 +134,7 @@ void get_tcn75_temp(uint8_t session_id, e_direction direction)
 	else
 		s_system.s_temp.thermocouple_board = (float)((((transfer_data_master[0] << 8) | transfer_data_master[1])>>4)*0.0625f);
 }
+
 void get_ext_ADC_voltages(uint8_t session_id, e_direction direction)
 {
 	static uint8_t ADC_channel = 0;
@@ -170,6 +171,7 @@ void get_ext_ADC_voltages(uint8_t session_id, e_direction direction)
 
 			s_system.s_power.ADC_uvolt[(transfer_data_master[2]>>5) & 0x03] = (int32_t)(ADC_read*7.8125f);									// measure volatage on thermoclouple [uV]
 			s_system.s_temp.thermocouple[(transfer_data_master[2]>>5) & 0x03] = (ADC_read*0.1953125f)+s_system.s_temp.thermocouple_board;	// convert thermocouple voltage to temperature [degree C]
+			s_system.s_temp.reflow_temp = (s_system.s_temp.thermocouple[2] > s_system.s_temp.thermocouple[3]) ? s_system.s_temp.thermocouple[3] : s_system.s_temp.thermocouple[2];
 
 			if(++ADC_channel <= 3)
 				i2c_send_session(session_get_ext_ADC_voltages,ADC_EXT_ADDRESS); // measure next channel

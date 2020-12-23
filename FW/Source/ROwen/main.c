@@ -16,6 +16,7 @@ int main(void)
 {
 	SystemCoreClockUpdate();
 	initialization();
+
 	/* Infinite loop */
 	while (1)
 	{
