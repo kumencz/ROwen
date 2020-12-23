@@ -1,0 +1,17 @@
+
+
+Při návrhu řešení problému jsme zvolili cestu upravení trouby na pečení. Původní regulace trouby byl obyčejný termostat. Toto původní řízení bylo nutno kompletně odstranit nebo odpojit a nahradit vlastním řešením. Po konzultaci s vedoucím príce jsme se rozhodli vyrobit 3 oddělené DPS. Výkonovou, řídící a malou pro měření teploty.
+
+Výkonová část
+=============
+Trouba se sestává ze 4 topných spirál, zapojených po dvou sériově, jako dolní a horní výhřev. Výrobce udává celkový příkon všech spirál a tedy celé trouby 1600W. Při návrhu řídícího systému jsme zachovali možnost oddělit vrchní a spodní ohřev, ovládní původního ventilátoru a případně i interního osvětlení trouby. Všechny tyto spotřebiče se řídí pomocí triaků dimenzovaných na 16A a 600V konkrétně BTA16. Triaky se řídí optotriaky se spínáním v nule (MOC3041). Další úkol výkonové DPS je výroba napájecího napští pro řídící DPS. Toto je realizováno malým trafem s udávaným výstupním napětím 6V při 3VA zatížení. Za trafem je greatzův můstek v jednom pouzdře a elektrolitický kondenzátor pro vyhlazení průběhu. Silová část je jištěna pro všechny triaky společnou 10A pojistkou. Trafo je jištěno pouze 100mA pojistkou.
+
+
+Řídící část
+===========
+Jako hlavní mozek celé trouby je zvolen mikrokontrolér od firmy STMicroelectronics a to STM32F051C4T6. Řídící deska dále obsahuje relativně velký (0.56") tří místný sedmi segmentový displej řízený pomocí dvou i2c GPIO expandérů(PCA9555D) na kteých je dále připojeno 7 LED diod, další dvě LED diody připojené přímo k MCU, piezo sirénu s vlastním buzením, rotační mechanickéký enkodér pro rychlé nastavování hodnot, 6 mikrotlačítek (4+reset+enkodér), stabilizátor napětí pro celou řídící desku a všechny integrované obvody (LF33), USB konektor sloužicí s tímto MCU pouze k napájení(při použití jiného MCU s USB výstupem je možné tento USB konektor využít ke komunikaci), dále dva IDC konektory pro připojení výkonové desky a desky pro měření teploty v troubě.
+
+
+Snímání teploty
+===============
+Měření teploty je prováděno pomocí termočlánku typu K. Generované napětí z termočlánku je měřeno pomocí AD převodníku s kompenzací bodu mrazu další teploměrem poblíž AD převodníku a svorkovnice pro termočlánky
