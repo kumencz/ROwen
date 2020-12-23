@@ -41,10 +41,10 @@ void uart_parse(char* string)
 	//int n = sscanf(string, "#%d*%d/%d*%d/%d*%d/%d*%d/%d*%d/%d*%d/%d*%d/%d*%d/%d*%d/%d*%dend", 
 //	sscanf(string, "#%u*%u/%u*%u/%u*%u/%u*%u/%u*%uend", 
 	sscanf(string, "z#%u*%u/%u*%u/%u*%u/end", 
-		&ramp[0].duration, &ramp[0].final_temp,
-		&ramp[1].duration, &ramp[1].final_temp,
-		&ramp[2].duration, &ramp[2].final_temp
-//		&ramp[3].duration, &ramp[3].final_temp,
+		&ramp[0]->duration, &ramp[0]->final_temp,
+		&ramp[1]->duration, &ramp[1]->final_temp,
+		&ramp[2]->duration, &ramp[2]->final_temp
+//		&ramp[3].duration, &ramp[3]->final_temp,
 //		&ramp[4].duration, &ramp[4].final_temp
 //		ramp[5].duration, ramp[5].final_temp,
 //		ramp[6].duration, ramp[6].final_temp,

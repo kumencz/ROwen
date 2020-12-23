@@ -75,25 +75,25 @@ void Define_I2C_Sessions(void)
 	i2c_sessions[0x01].param_count = 3;
 	i2c_sessions[0x01].byte_count = 0;
 	i2c_sessions[0x01].session_data = expander_config;
-	
+
 	// set i2c expander port 0
 	i2c_sessions[0x02].rw = write;
 	i2c_sessions[0x02].param_count = 3;
 	i2c_sessions[0x02].byte_count = 0;
 	i2c_sessions[0x02].session_data = expander_set;
-	
+
 	// config tcn75
 	i2c_sessions[0x03].rw = write;
 	i2c_sessions[0x03].param_count = 2;
 	i2c_sessions[0x03].byte_count = 0;
 	i2c_sessions[0x03].session_data = config_tcn75_temp;
-	
+
 	// get temp from tcn75
 	i2c_sessions[0x04].rw = read;
 	i2c_sessions[0x04].param_count = 1;
 	i2c_sessions[0x04].byte_count = 2;
 	i2c_sessions[0x04].session_data = get_tcn75_temp;
-	
+
 	// get ADC
 	i2c_sessions[0x05].rw = read;
 	i2c_sessions[0x05].param_count = 1;

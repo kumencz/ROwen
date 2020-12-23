@@ -14,7 +14,7 @@
 #define TS_CAL1     (*((uint16_t*) 0x1FFFF7B8))               // TS_CAL1 = 1727
 #define TS_CAL2     (*((uint16_t*) 0x1FFFF7C2))               // TS_CAL2 = 1308
 #define VREFINT_CAL (*((uint16_t*) 0x1FFFF7BA))
-#define AVG_SLOPE   (float)((TS_CAL1 - TS_CAL2)/80.0f) 
+#define AVG_SLOPE   (float)((TS_CAL1 - TS_CAL2)/80.0f)
 
 struct sys s_system;
 struct h_ramp ramp[][10]={
