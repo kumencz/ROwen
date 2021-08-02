@@ -187,6 +187,7 @@ void encoder_cw(void)
 		mode_selector(next_action);
 	}else if(mode_current == 14)
 	{
+		/* Temp */
 		display_block = 0;
 
 		set_temp_mem += 5;
@@ -194,8 +195,23 @@ void encoder_cw(void)
 		number_to_display(set_temp_mem,0);
 
 		display_block = 3000;
+	}else if(mode_current == 15)
+	{
+		/* Duty */
+		display_block = 0;
+
+		if(set_duty_mem < 100)
+		{
+			set_duty_mem++;
+		}
+		triac_set_duty(triac_1,set_duty_mem);
+		triac_set_duty(triac_2,set_duty_mem);
+		number_to_display(set_duty_mem,0);
+
+		display_block = 3000;
 	}else if(mode_current == 16)
 	{
+		/* Fan */
 		display_block = 0;
 		
 		triac_modify_duty(triac_4,10);
@@ -222,6 +238,7 @@ void encoder_ccw(void)
 		mode_selector(previous_action);
 	}else if(mode_current == 14)
 	{
+		/* Temp */
 		display_block = 0;
 
 		if(set_temp_mem > 5)
@@ -232,8 +249,23 @@ void encoder_ccw(void)
 		number_to_display(set_temp_mem,0);
 
 		display_block = 3000;
+	}else if(mode_current == 15)
+	{
+		/* Duty */
+		display_block = 0;
+
+		if(set_duty_mem)
+		{
+			set_duty_mem--;
+		}
+		triac_set_duty(triac_1,set_duty_mem);
+		triac_set_duty(triac_2,set_duty_mem);
+		number_to_display(set_duty_mem,0);
+
+		display_block = 3000;
 	}else if(mode_current == 16)
 	{
+		/* Fan */
 		display_block = 0;
 		
 		triac_modify_duty(triac_4,-10);

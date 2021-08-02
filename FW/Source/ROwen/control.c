@@ -25,6 +25,8 @@ void cool_down(uint8_t menu_id);
 void cool_down_stop(uint8_t menu_id);
 void set_temp(uint8_t menu_id);
 void stop_temp(uint8_t menu_id);
+void set_duty(uint8_t menu_id);
+void stop_duty(uint8_t menu_id);
 
 #define TS_CAL1     (*((uint16_t*) 0x1FFFF7B8))               // TS_CAL1 = 1727
 #define TS_CAL2     (*((uint16_t*) 0x1FFFF7C2))               // TS_CAL2 = 1308
@@ -166,7 +168,7 @@ struct s_menu_entry{
 /* ID = 13 */ {.text = " Pb", .parent_id = 1,	.start_func = start_ramp_9, .quit_func = stop_ramp},
 
 /* ID = 14 */ {.text = "Tep", .parent_id = 2, 	.start_func = set_temp, .quit_func = stop_temp},
-/* ID = 15 */ {.text = "Dut", .parent_id = 2, 	.start_func = NULL, .quit_func = NULL},
+/* ID = 15 */ {.text = "Dut", .parent_id = 2, 	.start_func = set_duty, .quit_func = stop_duty},
 
 /* ID = 16 */ {.text = "Fan", .parent_id = 0, 	.start_func = cool_down, .quit_func = cool_down_stop},
 };
@@ -255,6 +257,7 @@ float regErr;
 float P_term, I_term, D_term;
 int32_t duty;
 uint16_t set_temp_mem;
+uint16_t set_duty_mem;
 
 void PID_update_temp(uint16_t temp)
 {
@@ -333,6 +336,30 @@ void set_temp(uint8_t menu_id)
 	display_block = 3000;
 }
 void stop_temp(uint8_t menu_id)
+{
+	set_temp_mem = 0;
+
+	triac_set_duty(triac_1,0);
+	triac_set_duty(triac_2,0);
+	triac_set_duty(triac_3,0);	// light off
+	triac_set_duty(triac_4,0);	// fan off
+	number_to_display(0,0);
+
+	led_bargraph_set(0);
+	display_block = 1000;
+}
+void set_duty(uint8_t menu_id)
+{
+	triac_set_duty(triac_3,100);	//light on
+
+	set_duty_mem = 0;
+	triac_set_duty(triac_1,set_duty_mem);
+	triac_set_duty(triac_2,set_duty_mem);
+	number_to_display(set_duty_mem,0);
+
+	display_block = 3000;
+}
+void stop_duty(uint8_t menu_id)
 {
 	set_temp_mem = 0;
 

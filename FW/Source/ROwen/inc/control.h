@@ -43,6 +43,7 @@ extern uint8_t mode_current;
 extern float P_term, I_term, D_term;
 extern volatile uint16_t ADC_Output[2];
 extern uint16_t set_temp_mem;
+extern uint16_t set_duty_mem;
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */
 void ADC_read(void);
